@@ -19,12 +19,20 @@ class MainActivity : BaseActivity()
 
     private fun onBtnRollClicked()
     {
-        binding.lblRoll.setText(rollDice().toString())
+        val iD20 = rollD20()
+
+        binding.txtBaseRoll.text = iD20.toString()
+
+        val sMod : String = binding.editModifier.text.toString()
+
+        val iResult = iD20 + sMod.toInt()
+
+        binding.lblResult.text = iResult.toString()
     }
 
-    private fun rollDice(): Int
+    private fun rollD20(): Int
     {
-        var iResult : Int
+        val iResult : Int
 
         iResult = (1..20).random()
 
