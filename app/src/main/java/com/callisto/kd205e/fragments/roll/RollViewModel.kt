@@ -7,7 +7,7 @@ import com.callisto.kd205e.Difficulty
 
 class RollViewModel : ViewModel()
 {
-    private val mDifficulties = listOf(
+    val mDifficulties = listOf(
         Difficulty("Very easy", 5),
         Difficulty("Easy", 10),
         Difficulty("Medium", 15),
@@ -28,13 +28,17 @@ class RollViewModel : ViewModel()
 
     private val _modifier = MutableLiveData<Int>()
 
-    val modifier: LiveData<Int>
+    private val modifier: LiveData<Int>
         get() = _modifier
 
     private val _difficulty = MutableLiveData<Difficulty>()
 
     val difficulty: LiveData<Difficulty>
         get() = _difficulty
+
+    init {
+        _modifier.value = 0
+    }
 
     fun onBtnRollClicked()
     {
@@ -43,18 +47,25 @@ class RollViewModel : ViewModel()
         _rollAdjusted.value = rollBase.value!!.plus(modifier.value!!)
     }
 
+    fun onModifierChanged(modifier: String)
+    {
+        val mod = modifier.toInt()
+
+        if (mod != _modifier.value)
+            _modifier.value = mod
+    }
+
+    fun onDifficultySelected(item: Difficulty?) {
+        _difficulty.value = item
+    }
+
     private fun rollD20(): Int
     {
+        @Suppress("JoinDeclarationAndAssignment")
         val iResult : Int
 
         iResult = (1..20).random()
 
         return iResult
     }
-
-    fun onModifierChanged(modifier: String)
-    {
-        _modifier.value = modifier.toInt()
-    }
-
 }

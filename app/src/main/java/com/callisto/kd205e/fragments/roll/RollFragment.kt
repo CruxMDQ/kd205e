@@ -6,6 +6,8 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.callisto.kd205e.R
@@ -67,6 +69,31 @@ class RollFragment : BaseFragment()
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
         })
+
+        val arrayAdapter = ArrayAdapter(
+            this.requireContext(),
+            R.layout.row_item,
+            viewModel.mDifficulties
+        )
+
+        binding.spDifficulty.adapter = arrayAdapter
+
+        binding.spDifficulty.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
+        {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+//                TODO("Not yet implemented")
+            }
+
+            override fun onItemSelected
+            (
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                viewModel.onDifficultySelected(arrayAdapter.getItem(position))
+            }
+        }
 
         return binding.root
     }
