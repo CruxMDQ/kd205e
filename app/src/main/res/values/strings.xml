@@ -3,4 +3,5 @@
     <string name="btn_roll">Roll</string>
     <string name="label_modifier">Modifier</string>
     <string name="base_roll">Base roll</string>
+    <string name="lblDifficulty">Difficulty</string>
 </resources>
