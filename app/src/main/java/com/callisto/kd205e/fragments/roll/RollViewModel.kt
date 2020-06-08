@@ -13,7 +13,8 @@ class RollViewModel : ViewModel()
         Difficulty("Medium", 15),
         Difficulty("Hard", 20),
         Difficulty("Very hard", 25),
-        Difficulty("Nearly impossible", 30)
+        Difficulty("Nearly impossible", 30),
+        Difficulty("Custom", 0)
     )
 
     private val _rollBase = MutableLiveData<Int>()
@@ -28,13 +29,8 @@ class RollViewModel : ViewModel()
 
     private val _modifier = MutableLiveData<Int>()
 
-    private val modifier: LiveData<Int>
+    val modifier: LiveData<Int>
         get() = _modifier
-
-    private val _difficulty = MutableLiveData<Difficulty>()
-
-    val difficulty: LiveData<Difficulty>
-        get() = _difficulty
 
     init {
         _modifier.value = 0
@@ -56,7 +52,14 @@ class RollViewModel : ViewModel()
     }
 
     fun onDifficultySelected(item: Difficulty?) {
-        _difficulty.value = item
+        _dc.value = item!!.value
+    }
+
+    fun onDifficultySetManually(value: String)
+    {
+        val difficulty = value.toInt()
+
+        _dc.value = difficulty
     }
 
     private fun rollD20(): Int
@@ -68,4 +71,9 @@ class RollViewModel : ViewModel()
 
         return iResult
     }
+
+    val _dc = MutableLiveData<Int>()
+
+    val dc: LiveData<Int>
+        get() = _dc
 }

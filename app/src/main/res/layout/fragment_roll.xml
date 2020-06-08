@@ -25,10 +25,11 @@
             android:layout_margin="@dimen/margin_half"
             android:text="@string/base_roll"
             app:layout_constraintBaseline_toBaselineOf="@+id/txtBaseRoll"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/txtBaseRoll"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toStartOf="parent" />
+            />
 
         <TextView
             android:id="@+id/txtBaseRoll"
@@ -38,11 +39,12 @@
             android:text="@{rollViewModel.rollBase.toString()}"
             android:textAlignment="center"
             android:textSize="@dimen/textMedium"
-            app:layout_constraintBaseline_toBaselineOf="@+id/editModifier"
-            app:layout_constraintEnd_toStartOf="@+id/lblModifier"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_weight="2"
             app:layout_constraintStart_toEndOf="@+id/lblBaseRoll" />
+<!--        app:layout_constraintBaseline_toBaselineOf="@+id/editModifier"-->
 
         <TextView
             android:id="@+id/lblModifier"
@@ -50,11 +52,30 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_half"
             android:text="@string/label_modifier"
-            app:layout_constraintBaseline_toBaselineOf="@+id/editModifier"
-            app:layout_constraintEnd_toStartOf="@+id/editModifier"
+            app:layout_constraintTop_toBottomOf="@+id/lblBaseRoll"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@+id/txtBaseRoll" />
+            app:layout_constraintEnd_toStartOf="@+id/editModifier"
+            app:layout_constraintBaseline_toBaselineOf="@+id/editModifier"
+        />
+
+        <TextView
+            android:id="@+id/txtModifier"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_half"
+            android:textAlignment="center"
+            android:textSize="@dimen/textMedium"
+            android:text="@{rollViewModel.modifier.toString()}"
+            android:ems="10"
+            app:layout_constraintTop_toBottomOf="@+id/txtBaseRoll"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/editModifier"
+            app:layout_constraintEnd_toEndOf="@+id/editModifier"
+            app:layout_constraintHorizontal_weight="2"
+            app:layout_constraintBaseline_toBaselineOf="@+id/editModifier"
+            tools:text="4"/>
 
         <EditText
             android:id="@+id/editModifier"
@@ -64,10 +85,11 @@
             android:ems="10"
             android:inputType="numberSigned"
             android:textAlignment="center"
+            android:visibility="invisible"
+            app:layout_constraintTop_toBottomOf="@+id/txtBaseRoll"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/lblModifier"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintHorizontal_weight="2"
             tools:text="4"/>
 
@@ -90,9 +112,11 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_half"
             android:text="@string/lblDifficulty"
-            app:layout_constraintTop_toBottomOf="@+id/editModifier"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/spDifficulty"
+            app:layout_constraintTop_toTopOf="@+id/editDifficulty"
+            app:layout_constraintBottom_toBottomOf="@+id/spDifficulty"
             />
 
         <Spinner
@@ -100,29 +124,36 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_half"
-            app:layout_constraintStart_toEndOf="@+id/lblDifficulty"
-            app:layout_constraintEnd_toStartOf="@+id/editDifficulty"
             app:layout_constraintTop_toBottomOf="@+id/editModifier"
+            app:layout_constraintBottom_toBottomOf="@+id/editDifficulty"
+            app:layout_constraintEnd_toStartOf="@+id/editDifficulty"
             app:layout_constraintHorizontal_weight="3"
+            app:layout_constraintStart_toEndOf="@+id/lblDifficulty"
             />
 
-        <!--        <androidx.recyclerview.widget.RecyclerView-->
-<!--            android:id="@+id/rvDifficulty"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_margin="@dimen/margin_half"-->
-<!--            app:layout_constraintStart_toEndOf="@+id/lblDifficulty"-->
-<!--            app:layout_constraintEnd_toStartOf="@+id/editDifficulty"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/editModifier"-->
-<!--            app:layout_constraintHorizontal_weight="3"-->
-<!--            />-->
+        <TextView
+            android:id="@+id/txtDifficulty"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_half"
+            android:textAlignment="center"
+            android:textSize="@dimen/textMedium"
+            android:text="@{rollViewModel.dc.toString()}"
+            android:ems="10"
+            app:layout_constraintStart_toStartOf="@+id/editDifficulty"
+            app:layout_constraintEnd_toEndOf="@+id/editDifficulty"
+            app:layout_constraintTop_toBottomOf="@+id/editModifier"
+            app:layout_constraintHorizontal_weight="2"
+            app:layout_constraintBaseline_toBaselineOf="@+id/editDifficulty"
+            tools:text="4"/>
+<!--        android:text="@{rollViewModel.difficulty.stringValue}"-->
 
         <EditText
             android:id="@+id/editDifficulty"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_half"
-            android:text="@{rollViewModel.difficulty.stringValue}"
+            android:visibility="invisible"
             app:layout_constraintStart_toEndOf="@id/spDifficulty"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editModifier"
@@ -141,7 +172,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lblDifficulty" />
+            app:layout_constraintTop_toBottomOf="@+id/editDifficulty" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
