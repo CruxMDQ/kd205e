@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.callisto.kd205e.R
@@ -128,8 +129,18 @@ class RollFragment : BaseFragment()
             txtModifier.visibility = View.INVISIBLE
             editModifier.visibility = View.VISIBLE
 
+            // BUG: "Um, boss, dis 'ere fing don't open when s'posed ta."
+            // FIX: *KUFF* "'Ere'z yer solushun, ya git! Add that... urr... 'InputMethodManager' gubbin."
             editModifier.text.clear()
             editModifier.requestFocus()
+
+            // Source: stackoverflow.com/questions/1109022
+            val view = activity?.currentFocus
+            view?.let { v ->
+                val imm =
+                    context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                imm?.showSoftInput(view, 0)
+            }
         }
 
         binding.editModifier.addTextChangedListener(object : TextWatcher {
@@ -153,22 +164,40 @@ class RollFragment : BaseFragment()
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
         })
 
-        // Source: stackoverflow.com/questions/1109022
         binding.editModifier.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             if(keyCode == KeyEvent.KEYCODE_ENTER)
             {
                 txtModifier.visibility = View.VISIBLE
                 editModifier.visibility = View.INVISIBLE
 
+                // Source: stackoverflow.com/questions/1109022
                 val view = activity?.currentFocus
-                view?.let { v ->
+                view?.let { vi ->
                     val imm =
                         context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-                    imm?.hideSoftInputFromWindow(v.windowToken, 0)
+                    imm?.hideSoftInputFromWindow(vi.windowToken, 0)
                 }
                 return@OnKeyListener true
             }
             false
+        })
+
+        binding.lblResult.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                if (viewModel.rollAdjusted.value!! >= viewModel.dc.value!!)
+                {
+                    // Source: https://stackoverflow.com/questions/31842983/
+                    lblResult.setTextColor(ContextCompat.getColor(requireContext(), R.color.my_green))
+                }
+                else
+                {
+                    lblResult.setTextColor(ContextCompat.getColor(requireContext(), R.color.my_red))
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
         })
 
         return binding.root

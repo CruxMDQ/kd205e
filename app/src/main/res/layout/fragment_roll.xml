@@ -154,6 +154,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_half"
             android:visibility="invisible"
+            android:inputType="numberSigned"
             app:layout_constraintStart_toEndOf="@id/spDifficulty"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editModifier"
