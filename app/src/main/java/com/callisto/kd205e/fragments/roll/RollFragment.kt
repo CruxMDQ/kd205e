@@ -182,16 +182,16 @@ class RollFragment : BaseFragment()
             false
         })
 
-        binding.lblResult.addTextChangedListener(object : TextWatcher {
+        binding.txtResult.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 if (viewModel.rollAdjusted.value!! >= viewModel.dc.value!!)
                 {
                     // Source: https://stackoverflow.com/questions/31842983/
-                    lblResult.setTextColor(ContextCompat.getColor(requireContext(), R.color.my_green))
+                    txtResult.setTextColor(ContextCompat.getColor(requireContext(), R.color.my_green))
                 }
                 else
                 {
-                    lblResult.setTextColor(ContextCompat.getColor(requireContext(), R.color.my_red))
+                    txtResult.setTextColor(ContextCompat.getColor(requireContext(), R.color.my_red))
                 }
             }
 

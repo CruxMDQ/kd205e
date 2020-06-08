@@ -2,6 +2,7 @@
     <string name="app_name">Kd205e</string>
     <string name="btn_roll">Roll</string>
     <string name="label_modifier">Modifier</string>
-    <string name="base_roll">Base roll</string>
+    <string name="roll_base">Base roll</string>
     <string name="lblDifficulty">Difficulty</string>
+    <string name="roll_adjusted">Adjusted</string>
 </resources>
