@@ -89,18 +89,7 @@ class RollFragment : BaseFragment()
         binding.editDifficulty.addTextChangedListener(object : TextWatcher
         {
             override fun afterTextChanged(s: Editable?) {
-                val param = editDifficulty.text.toString()
-
-                try
-                {
-                    viewModel.onDifficultySetManually(param)
-                }
-                catch (e: NumberFormatException)
-                {
-                    Timber.tag("RollFragment").e(e)
-
-                    viewModel.onModifierChanged("0")
-                }
+                updateModelDifficulty()
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
@@ -108,18 +97,21 @@ class RollFragment : BaseFragment()
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
         })
 
+        binding.editDifficulty.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus)
+            {
+                updateModelDifficulty()
+                hideSoftKeyboard()
+            }
+        }
+
         binding.editDifficulty.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             if(keyCode == KeyEvent.KEYCODE_ENTER)
             {
                 txtDifficulty.visibility = View.VISIBLE
                 editDifficulty.visibility = View.INVISIBLE
 
-                val view = activity?.currentFocus
-                view?.let { v ->
-                    val imm =
-                        context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-                    imm?.hideSoftInputFromWindow(v.windowToken, 0)
-                }
+                hideSoftKeyboard()
                 return@OnKeyListener true
             }
             false
@@ -135,28 +127,12 @@ class RollFragment : BaseFragment()
             editModifier.requestFocus()
 
             // Source: stackoverflow.com/questions/1109022
-            val view = activity?.currentFocus
-            view?.let { v ->
-                val imm =
-                    context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-                imm?.showSoftInput(view, 0)
-            }
+            showSoftKeyboard()
         }
 
         binding.editModifier.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                val param = editModifier.text.toString()
-
-                try
-                {
-                    viewModel.onModifierChanged(param)
-                }
-                catch (e: NumberFormatException)
-                {
-                    Timber.tag("RollFragment").e(e)
-
-                    viewModel.onModifierChanged("0")
-                }
+                updateModelRollModifier()
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
@@ -164,19 +140,21 @@ class RollFragment : BaseFragment()
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
         })
 
+        binding.editModifier.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus)
+            {
+                updateModelRollModifier()
+                hideSoftKeyboard()
+            }
+        }
+
         binding.editModifier.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             if(keyCode == KeyEvent.KEYCODE_ENTER)
             {
                 txtModifier.visibility = View.VISIBLE
                 editModifier.visibility = View.INVISIBLE
 
-                // Source: stackoverflow.com/questions/1109022
-                val view = activity?.currentFocus
-                view?.let { vi ->
-                    val imm =
-                        context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-                    imm?.hideSoftInputFromWindow(vi.windowToken, 0)
-                }
+                hideSoftKeyboard()
                 return@OnKeyListener true
             }
             false
@@ -201,5 +179,57 @@ class RollFragment : BaseFragment()
         })
 
         return binding.root
+    }
+
+    private fun showSoftKeyboard()
+    {
+        val view = activity?.currentFocus
+        view?.let { v ->
+            val imm =
+                context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            imm?.showSoftInput(view, 0)
+        }
+    }
+
+    private fun updateModelRollModifier()
+    {
+        val param = editModifier.text.toString()
+
+        try
+        {
+            viewModel.onModifierChanged(param)
+        }
+        catch (e: NumberFormatException)
+        {
+            Timber.tag("RollFragment").e(e)
+
+            viewModel.onModifierChanged("0")
+        }
+    }
+
+    private fun updateModelDifficulty()
+    {
+        val param = editDifficulty.text.toString()
+
+        try
+        {
+            viewModel.onDifficultySetManually(param)
+        }
+        catch (e: NumberFormatException)
+        {
+            Timber.tag("RollFragment").e(e)
+
+            viewModel.onDifficultySetManually("5")
+        }
+    }
+
+    // Source: stackoverflow.com/questions/1109022
+    private fun hideSoftKeyboard() {
+        val view = activity?.currentFocus
+        view?.let { v ->
+            val imm =
+                context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            imm?.hideSoftInputFromWindow(v.windowToken, 0)
+        }
     }
 }

@@ -43,21 +43,21 @@ class RollViewModel : ViewModel()
         _rollAdjusted.value = rollBase.value!!.plus(modifier.value!!)
     }
 
-    fun onModifierChanged(modifier: String)
+    fun onModifierChanged(param: String)
     {
-        val mod = modifier.toInt()
+        val mod = param.toInt()
 
         if (mod != _modifier.value)
             _modifier.value = mod
     }
 
-    fun onDifficultySelected(item: Difficulty?) {
-        _dc.value = item!!.value
+    fun onDifficultySelected(param: Difficulty?) {
+        _dc.value = param!!.value
     }
 
-    fun onDifficultySetManually(value: String)
+    fun onDifficultySetManually(param: String)
     {
-        val difficulty = value.toInt()
+        val difficulty = param.toInt()
 
         _dc.value = difficulty
     }
