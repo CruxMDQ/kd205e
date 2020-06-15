@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/rollFragment">
+    app:startDestination="@id/raceSelectionFragment">
 
     <fragment
         android:id="@+id/rollFragment"
@@ -11,5 +11,10 @@
         android:label="Roll"
         tools:layout="@layout/fragment_roll"
         />
+    <fragment
+        android:id="@+id/raceSelectionFragment"
+        android:name="com.callisto.kd205e.fragments.race.RaceFragment"
+        android:label="race_selection_fragment"
+        tools:layout="@layout/race_selection_fragment" />
 
 </navigation>

@@ -1,4 +1,4 @@
-package com.callisto.kd205e
+package com.callisto.kd205e.model
 
 data class Difficulty(val title: String, var value: Int)
 {
