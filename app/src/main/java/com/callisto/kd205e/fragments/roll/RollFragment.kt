@@ -63,7 +63,8 @@ class RollFragment : BaseFragment()
 
         binding.spDifficulty.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
         {
-            override fun onNothingSelected(parent: AdapterView<*>?) { /*TODO("Not yet implemented")*/ }
+            override fun onNothingSelected(parent: AdapterView<*>?)
+            { /*TODO("Not yet implemented")*/ }
 
             override fun onItemSelected
             (
@@ -71,7 +72,8 @@ class RollFragment : BaseFragment()
                 view: View?,
                 position: Int,
                 id: Long
-            ) {
+            )
+            {
                 val item = arrayAdapter.getItem(position)
 
                 if (item!!.title == "Custom")
@@ -105,7 +107,7 @@ class RollFragment : BaseFragment()
             }
         }
 
-        binding.editDifficulty.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+        binding.editDifficulty.setOnKeyListener(View.OnKeyListener { _, keyCode, _ ->
             if(keyCode == KeyEvent.KEYCODE_ENTER)
             {
                 txtDifficulty.visibility = View.VISIBLE
