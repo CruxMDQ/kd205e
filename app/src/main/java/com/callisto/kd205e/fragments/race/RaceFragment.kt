@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Spinner
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -14,6 +16,7 @@ import com.callisto.kd205e.database.Kd205eDatabase
 import com.callisto.kd205e.database.model.RaceModifierPair
 import com.callisto.kd205e.database.model.Species
 import com.callisto.kd205e.databinding.RaceSelectionFragmentBinding
+import com.callisto.kd205e.experimental.ExperimentalDatabase
 import com.callisto.kd205e.fragments.BaseFragment
 import timber.log.Timber
 
@@ -31,8 +34,11 @@ class RaceFragment : BaseFragment()
 
     private lateinit var viewModel: RaceViewModel
 
+    private lateinit var raceSpinnerAdapter: ArrayAdapter<Species>
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View?
     {
@@ -56,48 +62,30 @@ class RaceFragment : BaseFragment()
 
         binding.lifecycleOwner = viewLifecycleOwner
 
+        binding.btnPickRaceAgain.setOnClickListener {
+            showDialogSpinner()
+        }
+
         viewModel.onStartTracking()
 
         viewModel.races.observe(viewLifecycleOwner, Observer {
             response ->
             if (!response.isNullOrEmpty())
             {
-                val arrayAdapter = ArrayAdapter<Species>(
+                raceSpinnerAdapter = ArrayAdapter(
                     this.requireContext(),
                     R.layout.row_item,
                     getSpeciesForSpinner(response)
                 )
 
-                binding.pickerRace.adapter = arrayAdapter
-
-                // Source: https://stackoverflow.com/a/37561529
-                binding.pickerRace.setSelection(0, false)
-
-                binding.pickerRace.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
-                {
-                    override fun onNothingSelected(parent: AdapterView<*>?) { }
-
-                    override fun onItemSelected(
-                        parent: AdapterView<*>?,
-                        view: View?,
-                        position: Int,
-                        id: Long
-                    )
-                    {
-                        // FIXED Find out how to stop this from firing when the adapter is set
-                        // See source before setting listener
-                        val species: Species? = arrayAdapter.getItem(position)
-
-                        viewModel.onRacePicked(species)
-                    }
-                }
+                showDialogSpinner()
             }
         })
 
         return binding.root
     }
 
-    // TODO find a way to move this out of the fragment
+    // TODO find a way to move this out of the fragment and into the model
     private fun getSpeciesForSpinner(response: List<RaceModifierPair>): MutableList<Species>
     {
         val mListSpecies = mutableListOf<Species>()
@@ -113,5 +101,48 @@ class RaceFragment : BaseFragment()
         Timber.v("Races retrieved: %s", mListSpecies.size.toString())
 
         return mListSpecies
+    }
+
+    // "Boss, da sauce fer doing dis 'ere fing:
+    // https://inducesmile.com/kotlin-source-code/how-to-display-a-spinner-in-alert-dialog-in-kotlin/ "
+    private fun showDialogSpinner()
+    {
+        val spinner = Spinner(requireContext())
+
+        val alertDialogBuilder = AlertDialog.Builder(requireContext())
+
+        spinner.adapter = raceSpinnerAdapter
+
+        spinner.setSelection(0, false)
+
+        alertDialogBuilder.setTitle("Pick a race")
+        alertDialogBuilder.setMessage("Select a race from the options shown.")
+
+        alertDialogBuilder.setView(spinner)
+
+        val alertDialog = alertDialogBuilder.create()
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
+        {
+            override fun onNothingSelected(parent: AdapterView<*>?) { }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            )
+            {
+                // FIXED Find out how to stop this from firing when the adapter is set
+                // Source: https://stackoverflow.com/a/37561529
+                val species: Species? = raceSpinnerAdapter.getItem(position)
+
+                viewModel.onRacePicked(species)
+
+                alertDialog.dismiss()
+            }
+        }
+
+        alertDialog.show()
     }
 }

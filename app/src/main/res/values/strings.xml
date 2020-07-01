@@ -5,6 +5,7 @@
     <string name="roll_base">Base roll</string>
     <string name="lblDifficulty">Difficulty</string>
     <string name="roll_adjusted">Adjusted</string>
-    <string name="tap_to_pick_a_race">Tap to pick a race</string>
-    <string name="lblPickAClass">Pick a class</string>
+    <string name="lblPickARace">Tap to pick a race</string>
+    <string name="lblPickAClass">Select a class</string>
+    <string name="lblPickRaceAgain">Pick again</string>
 </resources>

@@ -9,11 +9,13 @@ import com.callisto.kd205e.database.model.*
 
 @Database(entities = [
     DBAttribute::class,
+    DBAbilityScore::class,
     DBAbilityScoreModifier::class,
+    DBCharacter::class,
     DBRace::class],
     views = [
     RacialAttributes::class],
-    version = 7, exportSchema = false)
+    version = 8, exportSchema = false)
 @TypeConverters(DBASMTypeConverter::class)
 abstract class Kd205eDatabase : RoomDatabase()
 {

@@ -150,7 +150,7 @@ class RollFragment : BaseFragment()
             }
         }
 
-        binding.editModifier.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+        binding.editModifier.setOnKeyListener(View.OnKeyListener { _, keyCode, _ ->
             if(keyCode == KeyEvent.KEYCODE_ENTER)
             {
                 txtModifier.visibility = View.VISIBLE
@@ -186,7 +186,7 @@ class RollFragment : BaseFragment()
     private fun showSoftKeyboard()
     {
         val view = activity?.currentFocus
-        view?.let { v ->
+        view?.let { _ ->
             val imm =
                 context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             imm?.showSoftInput(view, 0)

@@ -7,6 +7,12 @@ import androidx.room.*
     indices = [
         Index(
             value = ["row_id", "race_id", "attribute_id"]
+        ),
+        Index(
+            value = ["attribute_id"]
+        ),
+        Index(
+            value = ["race_id"]
         )
     ],
     foreignKeys = [
@@ -25,7 +31,7 @@ import androidx.room.*
     ]
 )
 data class DBAbilityScoreModifier
-    (
+(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "row_id")
     var modifierId: Long = 0L,
@@ -44,6 +50,84 @@ data class DBAbilityScoreModifier
         this.fRaceId = raceId
         this.fAttributeId = attributeId
         this.value = value
+    }
+}
+
+@Entity(tableName = "characters_attributes",
+    indices = [
+        Index(
+            value = ["row_id", "character_id", "attribute_id"]
+        ),
+        Index(
+            value = ["attribute_id"]
+        ),
+        Index(
+            value = ["character_id"]
+        )
+    ],
+    foreignKeys = [
+        ForeignKey(
+            entity = DBAttribute::class,
+            parentColumns = ["attributeId"],
+            childColumns = ["attribute_id"],
+            onDelete = ForeignKey.NO_ACTION
+        ),
+        ForeignKey(
+            entity = DBCharacter::class,
+            parentColumns = ["characterId"],
+            childColumns = ["character_id"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]
+)
+data class DBAbilityScore
+(
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "row_id")
+    var scoreId: Long = 0L,
+
+    @ColumnInfo(name = "character_id")
+    var fCharacterId: Long = 0L,
+
+    @ColumnInfo(name = "attribute_id")
+    var fAttributeId: Long = 0L,
+
+    var value: Int = 0
+)
+{
+    constructor(characterId: Long, attributeId: Long, value: Int) : this()
+    {
+        this.fCharacterId = characterId
+        this.fAttributeId = attributeId
+        this.value = value
+    }
+}
+
+@Entity(tableName = "characters",
+    foreignKeys = [
+        ForeignKey(
+            entity = DBRace::class,
+            parentColumns = ["raceId"],
+            childColumns = ["race_id"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]
+)
+data class DBCharacter
+    (
+    @PrimaryKey(autoGenerate = true)
+    var characterId: Long = 0L,
+
+    @ColumnInfo(name = "race_id")
+    var raceId: Long = 0L,
+
+    @ColumnInfo(name = "character_name")
+    var name: String = ""
+)
+{
+    override fun toString(): String
+    {
+        return name
     }
 }
 
