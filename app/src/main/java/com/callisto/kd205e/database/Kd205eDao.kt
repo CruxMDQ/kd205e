@@ -5,7 +5,7 @@ import androidx.room.*
 import com.callisto.kd205e.database.model.*
 
 @Dao
-interface RaceDao
+interface Kd205eDao
 {
     companion object{
         const val queryForAbilityScoreModifier = "SELECT modifierId, attribute_name AS name, value FROM races INNER JOIN race_attributes ON race_attributes.fRaceId = races.raceId INNER JOIN attributes ON race_attributes.fAttributeId = attributes.attributeId WHERE races.raceId = :id"
@@ -47,9 +47,27 @@ interface RaceDao
     @Query("SELECT * FROM RacialAttributes")
     fun queryRacialAttributesView(): List<RaceModifierPair>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertRace(race: DBRace) : Long
+    @Query("SELECT * FROM CharacterAbilityScores")
+    fun queryCharacterAbilityScoresView(): List<CharacterScorePair>
 
     @Query("SELECT * FROM races WHERE raceId = :id")
     fun getSingleRace(id: Long): DBRace?
+
+    @Insert
+    fun createNewCharacter(character: DBCharacter) : Long
+
+    @Update
+    fun updateCharacter(character: DBCharacter)
+
+    @Query("SELECT * FROM characters WHERE characterId = :id")
+    fun getSingleCharacter(id: Long): DBCharacter?
+
+    @Query("SELECT attributes.attributeId, attributes.attribute_name, characters_attributes.value FROM characters_attributes INNER JOIN characters ON characters.characterId = characters_attributes.character_id INNER JOIN attributes ON attributes.attributeId = characters_attributes.attribute_id WHERE characters_attributes.character_id = :id")
+    fun getScoresForCharacter(id: Long): List<AbilityScore>?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertCharacterScore(abilityScore: DBAbilityScore) : Long
+
+    @Update
+    fun updateCharacterScore(abilityScore: DBAbilityScore)
 }

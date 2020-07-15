@@ -7,13 +7,13 @@
     <data>
         <variable
             name="raceSelectionViewModel"
-            type="com.callisto.kd205e.fragments.race.RaceViewModel" />
+            type="com.callisto.kd205e.fragments.species.SpeciesViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragments.race.RaceFragment">
+        tools:context=".fragments.species.SpeciesFragment">
 
         <TextView
             android:id="@+id/txtDetailsRace"

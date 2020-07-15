@@ -8,18 +8,21 @@ import androidx.room.TypeConverters
 import com.callisto.kd205e.database.model.*
 
 @Database(entities = [
-    DBAttribute::class,
-    DBAbilityScore::class,
-    DBAbilityScoreModifier::class,
-    DBCharacter::class,
-    DBRace::class],
+        DBAttribute::class,
+        DBAbilityScore::class,
+        DBAbilityScoreModifier::class,
+        DBCharacter::class,
+        DBRace::class
+    ],
     views = [
-    RacialAttributes::class],
-    version = 8, exportSchema = false)
-@TypeConverters(DBASMTypeConverter::class)
+        CharacterAbilityScores::class,
+        RacialAttributes::class
+    ],
+    version = 9, exportSchema = true)
+@TypeConverters(Kd205eTypeConverters::class)
 abstract class Kd205eDatabase : RoomDatabase()
 {
-    abstract val raceDao: RaceDao
+    abstract val dao: Kd205eDao
 
     // Allows clients to access methods for creating/getting DB w/o instantiating class
     companion object

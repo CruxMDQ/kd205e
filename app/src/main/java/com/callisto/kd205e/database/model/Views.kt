@@ -11,3 +11,13 @@ data class RacialAttributes(
     val name: String?,
     val value: Int
 )
+
+@DatabaseView("SELECT characters.characterId, characters.character_name, characters.race_id, attributes.attributeId, attributes.attribute_name, characters_attributes.value FROM characters INNER JOIN attributes ON characters_attributes.attribute_id = attributes.attributeId INNER JOIN characters_attributes ON characters_attributes.character_id = characters.characterId")
+data class CharacterAbilityScores(
+    val characterId: Long,
+    val character_name: String,
+    val raceId: Long,
+    val attributeId: Long,
+    val attribute_name: String,
+    val value: Int
+)

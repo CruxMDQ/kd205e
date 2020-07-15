@@ -1,4 +1,4 @@
-package com.callisto.kd205e.fragments.race
+package com.callisto.kd205e.fragments.species
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,28 +11,28 @@ import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.callisto.kd205e.R
 import com.callisto.kd205e.database.Kd205eDatabase
 import com.callisto.kd205e.database.model.RaceModifierPair
 import com.callisto.kd205e.database.model.Species
 import com.callisto.kd205e.databinding.RaceSelectionFragmentBinding
-import com.callisto.kd205e.experimental.ExperimentalDatabase
 import com.callisto.kd205e.fragments.BaseFragment
 import timber.log.Timber
 
-class RaceFragment : BaseFragment()
+class SpeciesFragment : BaseFragment()
 {
     companion object
     {
         fun newInstance() =
-            RaceFragment()
+            SpeciesFragment()
     }
 
     // To resolve these things, check the name of the layout used.
     // Source: https://stackoverflow.com/a/57228909
     private lateinit var binding: RaceSelectionFragmentBinding
 
-    private lateinit var viewModel: RaceViewModel
+    private lateinit var viewModel: SpeciesViewModel
 
     private lateinit var raceSpinnerAdapter: ArrayAdapter<Species>
 
@@ -51,12 +51,16 @@ class RaceFragment : BaseFragment()
 
         val application = requireNotNull(this.activity).application
 
-        val database = Kd205eDatabase.getInstance(application).raceDao
+        val database = Kd205eDatabase.getInstance(application).dao
 
-        val viewModelFactory = RaceFragmentViewModelFactory(database, application)
+        val viewModelFactory =
+            SpeciesViewModelFactory(
+                database,
+                application
+            )
 
         viewModel = ViewModelProvider(this, viewModelFactory)
-            .get(RaceViewModel::class.java)
+            .get(SpeciesViewModel::class.java)
 
         binding.raceSelectionViewModel = viewModel
 
@@ -66,7 +70,12 @@ class RaceFragment : BaseFragment()
             showDialogSpinner()
         }
 
-        viewModel.onStartTracking()
+        binding.btnPickAClass.setOnClickListener {
+            val action = SpeciesFragmentDirections.actionRaceSelectionFragmentToScoresFragment(viewModel.getCharacterId())
+            this.findNavController().navigate(action)
+        }
+
+        viewModel.track()
 
         viewModel.races.observe(viewLifecycleOwner, Observer {
             response ->

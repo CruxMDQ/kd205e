@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="scoresViewModel"
+            type="com.callisto.kd205e.fragments.scores.ScoresViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".fragments.species.ScoresFragment">
+
+        <include
+            android:id="@+id/scoreSetterStrength"
+            layout="@layout/view_score_setter"
+            />
+
+        <include
+            android:id="@+id/scoreSetterDexterity"
+            layout="@layout/view_score_setter"
+            />
+
+        <include
+            android:id="@+id/scoreSetterConstitution"
+            layout="@layout/view_score_setter"
+            />
+
+        <include
+            android:id="@+id/scoreSetterIntelligence"
+            layout="@layout/view_score_setter"
+            />
+
+        <include
+            android:id="@+id/scoreSetterWisdom"
+            layout="@layout/view_score_setter"
+            />
+
+        <include
+            android:id="@+id/scoreSetterCharisma"
+            layout="@layout/view_score_setter"
+            />
+    </LinearLayout>
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        tools:context=".fragments.species.ScoresFragment">-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/iconStr"-->
+<!--            style="@style/AttributeIcon"-->
+<!--            android:src="@drawable/icons8_strength"-->
+<!--            app:layout_constraintBottom_toTopOf="@id/iconDex"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtBaseScoreStr"-->
+<!--            style="@style/AttributeText"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconStr"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/txtPlusStr"-->
+<!--            app:layout_constraintStart_toEndOf="@id/iconStr"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconStr"-->
+<!--            tools:text="15" />-->
+
+<!--&lt;!&ndash;        <ImageButton&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:src="@drawable/ic_iconmonstr_chevron_up"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:tint="@color/my_green"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintBottom_toBottomOf="@id/txtBaseScoreStr"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintEnd_toStartOf="@id/txtBaseScoreStr"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintStart_toEndOf="@id/iconStr"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintTop_toTopOf="@id/txtBaseScoreStr" />&ndash;&gt;-->
+
+<!--        <EditText-->
+<!--            android:id="@+id/editBaseScoreStr"-->
+<!--            style="@style/AttributeEdit"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconStr"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/txtPlusStr"-->
+<!--            app:layout_constraintStart_toEndOf="@id/iconStr"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconStr"-->
+<!--            tools:text="15" />-->
+
+<!--&lt;!&ndash;        <ImageButton&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:src="@drawable/ic_iconmonstr_chevron_down"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:tint="@color/my_red"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintBottom_toBottomOf="@id/txtBaseScoreStr"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintEnd_toStartOf="@id/txtPlusStr"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintStart_toEndOf="@id/txtBaseScoreStr"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintTop_toTopOf="@id/txtBaseScoreStr" />&ndash;&gt;-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtPlusStr"-->
+<!--            style="@style/AttributeText"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconStr"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/txtBonusStr"-->
+<!--            app:layout_constraintStart_toEndOf="@id/txtBaseScoreStr"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconStr"-->
+<!--            tools:text="+" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtBonusStr"-->
+<!--            style="@style/AttributeText"-->
+<!--            android:textColor="@color/my_green"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconStr"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/txtEqualsStr"-->
+<!--            app:layout_constraintStart_toEndOf="@id/txtPlusStr"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconStr"-->
+<!--            tools:text="2" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtEqualsStr"-->
+<!--            style="@style/AttributeText"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconStr"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/txtFinalStr"-->
+<!--            app:layout_constraintStart_toEndOf="@id/txtBonusStr"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconStr"-->
+<!--            tools:text="=" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtFinalStr"-->
+<!--            style="@style/AttributeText"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconStr"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toEndOf="@id/txtEqualsStr"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconStr"-->
+<!--            tools:text="17" />-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/iconDex"-->
+<!--            style="@style/AttributeIcon"-->
+<!--            android:src="@drawable/icons8_dexterity"-->
+<!--            app:layout_constraintBottom_toTopOf="@id/iconCon"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/iconStr" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtBaseScoreDex"-->
+<!--            style="@style/AttributeText"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconDex"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/txtPlusDex"-->
+<!--            app:layout_constraintStart_toEndOf="@id/iconDex"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconDex"-->
+<!--            tools:text="14" />-->
+
+<!--        <EditText-->
+<!--            android:id="@+id/editBaseScoreDex"-->
+<!--            style="@style/AttributeEdit"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconDex"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/txtPlusDex"-->
+<!--            app:layout_constraintStart_toEndOf="@id/iconDex"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconDex"-->
+<!--            tools:text="15" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtPlusDex"-->
+<!--            style="@style/AttributeText"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconDex"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/txtBonusDex"-->
+<!--            app:layout_constraintStart_toEndOf="@id/txtBaseScoreDex"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconDex"-->
+<!--            tools:text="+" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtBonusDex"-->
+<!--            style="@style/AttributeText"-->
+<!--            android:textColor="@color/my_green"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconDex"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/txtEqualsDex"-->
+<!--            app:layout_constraintStart_toEndOf="@id/txtPlusDex"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconDex"-->
+<!--            tools:text="0" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtEqualsDex"-->
+<!--            style="@style/AttributeText"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconDex"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/txtFinalDex"-->
+<!--            app:layout_constraintStart_toEndOf="@id/txtBonusDex"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconDex"-->
+<!--            tools:text="=" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtFinalDex"-->
+<!--            style="@style/AttributeText"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconDex"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toEndOf="@id/txtEqualsDex"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconDex"-->
+<!--            tools:text="14" />-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/iconCon"-->
+<!--            style="@style/AttributeIcon"-->
+<!--            android:src="@drawable/icons8_constitution"-->
+<!--            app:layout_constraintBottom_toTopOf="@id/iconInt"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/iconDex" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtBaseScoreCon"-->
+<!--            style="@style/AttributeText"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconCon"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/txtPlusCon"-->
+<!--            app:layout_constraintStart_toEndOf="@id/iconCon"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconCon"-->
+<!--            tools:text="14" />-->
+
+<!--        <EditText-->
+<!--            android:id="@+id/editBaseScoreCon"-->
+<!--            style="@style/AttributeEdit"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconCon"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/txtPlusCon"-->
+<!--            app:layout_constraintStart_toEndOf="@id/iconCon"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconCon"-->
+<!--            tools:text="15" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtPlusCon"-->
+<!--            style="@style/AttributeText"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconCon"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/txtBonusCon"-->
+<!--            app:layout_constraintStart_toEndOf="@id/txtBaseScoreCon"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconCon"-->
+<!--            tools:text="+" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtBonusCon"-->
+<!--            style="@style/AttributeText"-->
+<!--            android:textColor="@color/my_green"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconCon"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/txtEqualsCon"-->
+<!--            app:layout_constraintStart_toEndOf="@id/txtPlusCon"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconCon"-->
+<!--            tools:text="0" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtEqualsCon"-->
+<!--            style="@style/AttributeText"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconCon"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/txtFinalCon"-->
+<!--            app:layout_constraintStart_toEndOf="@id/txtBonusCon"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconCon"-->
+<!--            tools:text="=" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtFinalCon"-->
+<!--            style="@style/AttributeText"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconCon"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toEndOf="@id/txtEqualsCon"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconCon"-->
+<!--            tools:text="14" />-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/iconInt"-->
+<!--            style="@style/AttributeIcon"-->
+<!--            android:src="@drawable/icons8_intelligence"-->
+<!--            app:layout_constraintBottom_toTopOf="@id/iconWis"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/iconCon" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtBaseScoreInt"-->
+<!--            style="@style/AttributeText"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconInt"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/txtPlusInt"-->
+<!--            app:layout_constraintStart_toEndOf="@id/iconInt"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconInt"-->
+<!--            tools:text="14" />-->
+
+<!--        <EditText-->
+<!--            android:id="@+id/editBaseScoreInt"-->
+<!--            style="@style/AttributeEdit"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconInt"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/txtPlusInt"-->
+<!--            app:layout_constraintStart_toEndOf="@id/iconInt"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconInt"-->
+<!--            tools:text="15" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtPlusInt"-->
+<!--            style="@style/AttributeText"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconInt"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/txtBonusInt"-->
+<!--            app:layout_constraintStart_toEndOf="@id/txtBaseScoreInt"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconInt"-->
+<!--            tools:text="+" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtBonusInt"-->
+<!--            style="@style/AttributeText"-->
+<!--            android:textColor="@color/my_green"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconInt"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/txtEqualsInt"-->
+<!--            app:layout_constraintStart_toEndOf="@id/txtPlusInt"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconInt"-->
+<!--            tools:text="0" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtEqualsInt"-->
+<!--            style="@style/AttributeText"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconInt"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/txtFinalInt"-->
+<!--            app:layout_constraintStart_toEndOf="@id/txtBonusInt"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconInt"-->
+<!--            tools:text="=" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtFinalInt"-->
+<!--            style="@style/AttributeText"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconInt"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toEndOf="@id/txtEqualsInt"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconInt"-->
+<!--            tools:text="14" />-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/iconWis"-->
+<!--            style="@style/AttributeIcon"-->
+<!--            android:src="@drawable/icons8_wisdom"-->
+<!--            app:layout_constraintBottom_toTopOf="@id/iconCha"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/iconInt" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtBaseScoreWis"-->
+<!--            style="@style/AttributeText"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconWis"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/txtPlusWis"-->
+<!--            app:layout_constraintStart_toEndOf="@id/iconWis"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconWis"-->
+<!--            tools:text="14" />-->
+
+<!--        <EditText-->
+<!--            android:id="@+id/editBaseScoreWis"-->
+<!--            style="@style/AttributeEdit"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconWis"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/txtPlusWis"-->
+<!--            app:layout_constraintStart_toEndOf="@id/iconWis"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconWis"-->
+<!--            tools:text="15" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtPlusWis"-->
+<!--            style="@style/AttributeText"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconWis"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/txtBonusWis"-->
+<!--            app:layout_constraintStart_toEndOf="@id/txtBaseScoreWis"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconWis"-->
+<!--            tools:text="+" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtBonusWis"-->
+<!--            style="@style/AttributeText"-->
+<!--            android:textColor="@color/my_green"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconWis"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/txtEqualsWis"-->
+<!--            app:layout_constraintStart_toEndOf="@id/txtPlusWis"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconWis"-->
+<!--            tools:text="0" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtEqualsWis"-->
+<!--            style="@style/AttributeText"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconWis"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/txtFinalWis"-->
+<!--            app:layout_constraintStart_toEndOf="@id/txtBonusWis"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconWis"-->
+<!--            tools:text="=" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtFinalWis"-->
+<!--            style="@style/AttributeText"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconWis"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toEndOf="@id/txtEqualsWis"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconWis"-->
+<!--            tools:text="14" />-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/iconCha"-->
+<!--            style="@style/AttributeIcon"-->
+<!--            android:src="@drawable/icons8_charisma"-->
+<!--            app:layout_constraintBottom_toTopOf="@id/txtMessage"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/iconWis" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtBaseScoreCha"-->
+<!--            style="@style/AttributeText"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconCha"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/txtPlusCha"-->
+<!--            app:layout_constraintStart_toEndOf="@id/iconCha"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconCha"-->
+<!--            tools:text="14" />-->
+
+<!--        <EditText-->
+<!--            android:id="@+id/editBaseScoreCha"-->
+<!--            style="@style/AttributeEdit"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconCha"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/txtPlusCha"-->
+<!--            app:layout_constraintStart_toEndOf="@id/iconCha"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconCha"-->
+<!--            tools:text="15" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtPlusCha"-->
+<!--            style="@style/AttributeText"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconCha"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/txtBonusCha"-->
+<!--            app:layout_constraintStart_toEndOf="@id/txtBaseScoreCha"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconCha"-->
+<!--            tools:text="+" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtBonusCha"-->
+<!--            style="@style/AttributeText"-->
+<!--            android:textColor="@color/my_green"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconCha"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/txtEqualsCha"-->
+<!--            app:layout_constraintStart_toEndOf="@id/txtPlusCha"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconCha"-->
+<!--            tools:text="0" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtEqualsCha"-->
+<!--            style="@style/AttributeText"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconCha"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/txtFinalCha"-->
+<!--            app:layout_constraintStart_toEndOf="@id/txtBonusCha"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconCha"-->
+<!--            tools:text="=" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtFinalCha"-->
+<!--            style="@style/AttributeText"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/iconCha"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toEndOf="@id/txtEqualsCha"-->
+<!--            app:layout_constraintTop_toTopOf="@id/iconCha"-->
+<!--            tools:text="14" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtMessage"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="@dimen/margin_half"-->
+<!--            app:layout_constraintBottom_toTopOf="@id/btnGoBackToSpeciesSelection"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/iconCha"-->
+<!--            tools:text="Rolls: 19" />-->
+
+<!--        <Button-->
+<!--            android:id="@+id/btnGoBackToSpeciesSelection"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="@dimen/margin_half"-->
+<!--            android:text="Pick species again"-->
+<!--            android:textAlignment="center"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent" />-->
+
+<!--        <Button-->
+<!--            android:id="@+id/btnSelectAClass"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="@dimen/margin_half"-->
+<!--            android:text="@string/lblPickAClass"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent" />-->
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+    <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        tools:context=".fragments.species.ScoresFragment">-->
+
+    <!--        <com.callisto.kd205e.views.scoresetter.ScoreSetterView-->
+    <!--            android:id="@+id/scoreSetterStr"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            app:layout_constraintTop_toTopOf="parent"-->
+    <!--            app:layout_constraintStart_toStartOf="parent"-->
+    <!--            app:attribute_name="Strength"-->
+    <!--            app:attribute_base_score="10"-->
+    <!--            app:attribute_bonus="0"-->
+    <!--            app:attribute_icon_id="@drawable/icons8_strength"-->
+    <!--            />-->
+
+    <!--        <com.callisto.kd205e.views.scoresetter.ScoreSetterView-->
+    <!--            android:id="@+id/scoreSetterDex"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            app:layout_constraintTop_toTopOf="parent"-->
+    <!--            app:layout_constraintStart_toStartOf="parent"-->
+    <!--            app:attribute_name="Dexterity"-->
+    <!--            app:attribute_base_score="10"-->
+    <!--            app:attribute_bonus="0"-->
+    <!--            />-->
+    <!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+</layout>
+
+

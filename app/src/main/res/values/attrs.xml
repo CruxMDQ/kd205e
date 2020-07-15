@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ScoreSetterView">
+        <attr name="attribute_name" format="string" />
+        <attr name="attribute_base_score" format="integer" />
+        <attr name="attribute_bonus" format="integer" />
+        <attr name="attribute_icon_id" format="integer" />
+    </declare-styleable>
+</resources>

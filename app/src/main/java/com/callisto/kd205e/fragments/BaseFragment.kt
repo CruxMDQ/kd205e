@@ -2,53 +2,79 @@ package com.callisto.kd205e.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import timber.log.Timber
 
 abstract class BaseFragment : Fragment()
 {
+    private var fragmentTag: String = ""
+    
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        Timber.tag("TitleFragment").i("onAttach called")
+
+        // This abortion of a code was found here: https://stackoverflow.com/a/45433261
+        fragmentTag = this.javaClass.asSubclass(this.javaClass).simpleName
+
+        Timber.tag(fragmentTag).i("onAttach called")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Timber.tag("TitleFragment").i("onCreate called")
+        Timber.tag(fragmentTag).i("onCreate called")
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View?
+    {
+        val view = super.onCreateView(inflater, container, savedInstanceState)
+        Timber.tag(fragmentTag).i("onCreateView called")
+        return view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        Timber.tag("TitleFragment").i("onActivityCreated called")
+        Timber.tag(fragmentTag).i("onActivityCreated called")
     }
 
     override fun onStart() {
         super.onStart()
-        Timber.tag("TitleFragment").i("onStart called")
+        Timber.tag(fragmentTag).i("onStart called")
     }
 
     override fun onResume() {
         super.onResume()
-        Timber.tag("TitleFragment").i("onResume called")
+        Timber.tag(fragmentTag).i("onResume called")
     }
 
     override fun onPause() {
         super.onPause()
-        Timber.tag("TitleFragment").i("onPause called")
+        Timber.tag(fragmentTag).i("onPause called")
     }
 
     override fun onStop() {
         super.onStop()
-        Timber.tag("TitleFragment").i("onStop called")
+        Timber.tag(fragmentTag).i("onStop called")
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?)
+    {
+        super.onViewCreated(view, savedInstanceState)
+        Timber.tag(fragmentTag).i("onViewCreated called")
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        Timber.tag("TitleFragment").i("onDestroyView called")
+        Timber.tag(fragmentTag).i("onDestroyView called")
     }
 
     override fun onDetach() {
         super.onDetach()
-        Timber.tag("TitleFragment").i("onDetach called")
+        Timber.tag(fragmentTag).i("onDetach called")
     }
 }

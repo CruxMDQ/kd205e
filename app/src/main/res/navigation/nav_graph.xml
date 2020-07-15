@@ -13,8 +13,22 @@
         />
     <fragment
         android:id="@+id/raceSelectionFragment"
-        android:name="com.callisto.kd205e.fragments.race.RaceFragment"
+        android:name="com.callisto.kd205e.fragments.species.SpeciesFragment"
         android:label="race_selection_fragment"
-        tools:layout="@layout/race_selection_fragment" />
+        tools:layout="@layout/race_selection_fragment" >
+        <action
+            android:id="@+id/action_raceSelectionFragment_to_scoresFragment"
+            app:destination="@id/scoresFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/scoresFragment"
+        android:name="com.callisto.kd205e.fragments.scores.ScoresFragment"
+        android:label="fragment_scores"
+        tools:layout="@layout/scores_fragment">
+        <argument
+            android:name="characterId"
+            app:argType="long" />
+    </fragment>
 
 </navigation>

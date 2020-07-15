@@ -8,4 +8,21 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AttributeText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/margin_half</item>
+        <item name="android:textSize">@dimen/textLarge</item>
+    </style>
+
+    <style name="AttributeEdit" parent="AttributeText">
+        <item name="android:inputType">number</item>
+        <item name="android:visibility">invisible</item>
+    </style>
+
+    <style name="AttributeIcon">
+        <item name="android:layout_width">@dimen/attributeIcon</item>
+        <item name="android:layout_height">@dimen/attributeIcon</item>
+        <item name="android:layout_margin">@dimen/margin_full</item>
+    </style>
 </resources>
