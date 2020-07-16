@@ -65,9 +65,12 @@ interface Kd205eDao
     @Query("SELECT attributes.attributeId, attributes.attribute_name, characters_attributes.value FROM characters_attributes INNER JOIN characters ON characters.characterId = characters_attributes.character_id INNER JOIN attributes ON attributes.attributeId = characters_attributes.attribute_id WHERE characters_attributes.character_id = :id")
     fun getScoresForCharacter(id: Long): List<AbilityScore>?
 
+    @Query("SELECT row_id, character_id, attribute_id, value FROM characters_attributes WHERE characters_attributes.character_id = :characterId AND characters_attributes.attribute_id = :attributeId")
+    fun getScoreForCharacter(characterId: Long, attributeId: Long) : DBAbilityScore
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCharacterScore(abilityScore: DBAbilityScore) : Long
 
-    @Update
-    fun updateCharacterScore(abilityScore: DBAbilityScore)
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    fun updateCharacterScore(abilityScore: DBAbilityScore) : Int
 }

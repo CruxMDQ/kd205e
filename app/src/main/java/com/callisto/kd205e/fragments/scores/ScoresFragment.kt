@@ -9,13 +9,10 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.callisto.kd205e.R
 import com.callisto.kd205e.database.Kd205eDatabase
-import com.callisto.kd205e.database.model.Character
 import com.callisto.kd205e.databinding.ScoresFragmentBinding
-import com.callisto.kd205e.databinding.ViewScoreSetterBinding
 import com.callisto.kd205e.fragments.BaseFragment
 
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -106,64 +103,13 @@ redButton, greenButton, yellowButton
 
         viewModel.track(characterId!!)
 
-        viewModel.strength.observe(viewLifecycleOwner, Observer {
-            bindScoreSetter(
-                binding.scoreSetterStrength,
-                viewModel.activeCharacter.value!!,
-                it.name
-            )
-        })
+        binding.txtBaseScoreStr.setOnClickListener { spawnEditingDialogBox(abilityStr) }
+        binding.txtBaseScoreDex.setOnClickListener { spawnEditingDialogBox(abilityDex) }
+        binding.txtBaseScoreCon.setOnClickListener { spawnEditingDialogBox(abilityCon) }
+        binding.txtBaseScoreInt.setOnClickListener { spawnEditingDialogBox(abilityInt) }
+        binding.txtBaseScoreWis.setOnClickListener { spawnEditingDialogBox(abilityWis) }
+        binding.txtBaseScoreCha.setOnClickListener { spawnEditingDialogBox(abilityCha) }
 
-        viewModel.activeCharacter.observe(viewLifecycleOwner, Observer
-        {
-            for (attribute in it.abilityScores!!)
-            {
-                when (attribute.name)
-                {
-                    abilityStr -> bindScoreSetter(
-                        binding.scoreSetterStrength,
-                        it,
-                        abilityStr
-                    )
-                    abilityDex -> bindScoreSetter(
-                        binding.scoreSetterDexterity,
-                        it,
-                        abilityDex
-                    )
-                    abilityCon -> bindScoreSetter(
-                        binding.scoreSetterConstitution,
-                        it,
-                        abilityCon
-                    )
-                    abilityInt -> bindScoreSetter(
-                        binding.scoreSetterIntelligence,
-                        it,
-                        abilityInt
-                    )
-                    abilityWis -> bindScoreSetter(
-                        binding.scoreSetterWisdom,
-                        it,
-                        abilityWis
-                    )
-                    abilityCha -> bindScoreSetter(
-                        binding.scoreSetterCharisma,
-                        it,
-                        abilityCha
-                    )
-                }
-            }
-        })
-
-        val abilitySetters = listOf(
-            binding.scoreSetterStrength, binding.scoreSetterDexterity,
-            binding.scoreSetterConstitution, binding.scoreSetterIntelligence,
-            binding.scoreSetterWisdom, binding.scoreSetterCharisma
-        )
-
-        for (item in abilitySetters)
-        {
-            item.panelContainer.setOnClickListener { spawnEditingDialogBox(item.panelContainer.tag.toString()) }
-        }
         return binding.root
     }
 
@@ -185,7 +131,7 @@ redButton, greenButton, yellowButton
         alertDialogBuilder.setPositiveButton("OK") { dialog, _ ->
             val score = input.text.toString().toInt()
 
-            viewModel.updateCharacterScore(ability, score)
+            viewModel.updateScore(ability, score)
 
             dialog.dismiss()
         }
@@ -193,29 +139,6 @@ redButton, greenButton, yellowButton
         val dialog = alertDialogBuilder.create()
 
         dialog.show()
-    }
-
-    private fun bindScoreSetter(
-        view: ViewScoreSetterBinding,
-        character: Character,
-        ability: String
-    )
-    {
-        view.bind(
-            character.getBaseScore(ability).toString(),
-            character.getModifierScore(ability).toString(),
-            character.getFinalScore(ability).toString()
-        )
-
-        view.panelContainer.tag = ability
-    }
-
-    // TODO Pick up from here
-    private fun ViewScoreSetterBinding.bind(base: String, modifier: String, final: String)
-    {
-        txtBaseScore.text = base
-        txtBonus.text = modifier
-        txtFinalScore.text = final
     }
 }
 
