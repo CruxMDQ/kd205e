@@ -5,8 +5,12 @@ import android.os.Build
 import android.text.Html
 import android.text.Spanned
 import androidx.core.text.HtmlCompat
+import androidx.databinding.ObservableBoolean
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import androidx.navigation.fragment.findNavController
+import com.callisto.kd205e.Kd205eApplication
 import com.callisto.kd205e.database.Kd205eDao
 import com.callisto.kd205e.database.model.*
 import com.callisto.kd205e.fragments.BaseViewModel
@@ -15,25 +19,34 @@ import timber.log.Timber
 import java.lang.StringBuilder
 
 class SpeciesViewModel
-(
-    val database: Kd205eDao,
-    application: Application
-) : BaseViewModel(application)
+    : BaseViewModel
 {
-    var races = MutableLiveData<List<RaceModifierPair>>()
+    val database: Kd205eDao
 
-    private var selectedRace = MutableLiveData<Species>()
+    constructor(database: Kd205eDao, application: Application) : super(application)
+    {
+        this.database = database
+        this.races = MutableLiveData()
+        this.characterId = MutableLiveData()
+        this.selectedRace = MutableLiveData()
 
-    val pickClassButtonEnabled = Transformations.map(selectedRace) {
-        it != null
+        this.setAbilityScoresEnabled = Transformations.map(selectedRace) {
+            it != null
+        }
+        this.selectedRaceString = Transformations.map(selectedRace) { selectedRace ->
+            formatRace(selectedRace)
+        }
     }
 
-    private var characterId = MutableLiveData<Long>()
+    var races: MutableLiveData<List<RaceModifierPair>>
 
-    val selectedRaceString = Transformations.map(selectedRace) {
-        selectedRace ->
-        formatRace(selectedRace)
-    }
+    private var characterId: MutableLiveData<Long>
+
+    private var selectedRace: MutableLiveData<Species>
+
+    val setAbilityScoresEnabled: LiveData<Boolean>
+
+    val selectedRaceString: LiveData<Spanned>
 
     private fun formatRace(species: Species): Spanned
     {
@@ -52,16 +65,29 @@ class SpeciesViewModel
         }
     }
 
+    fun track(parameter: Long)
+    {
+        uiScope.launch {
+            characterId.value = parameter
+
+            races.value = getRacesWithModsFromDB()
+
+//            isLoading.set(true)
+        }
+    }
+
     fun track()
     {
         uiScope.launch {
             characterId.value = createNewCharacter()
 
             races.value = getRacesWithModsFromDB()
+
+//            isLoading.set(true)
         }
     }
 
-    private suspend fun getSpecies(): List<Species>?
+    private suspend fun getSpecies(): MutableList<Species>
     {
         return withContext(Dispatchers.IO)
         {
@@ -118,6 +144,13 @@ class SpeciesViewModel
             updateCharacter(characterId.value!!, selectedRace.value!!.race.raceId)
         }
     }
+
+    // TODO Finish implementing this once I figure how to get the NavController from here
+//    fun onSetScoresClicked()
+//    {
+//        val action = SpeciesFragmentDirections.actionRaceSelectionFragmentToScoresFragment(getCharacterId())
+//        this.findNavController().navigate(action)
+//    }
 
     private suspend fun updateCharacter(characterId: Long, raceId: Long)
     {

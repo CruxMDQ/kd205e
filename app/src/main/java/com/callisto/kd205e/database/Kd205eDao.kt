@@ -7,10 +7,6 @@ import com.callisto.kd205e.database.model.*
 @Dao
 interface Kd205eDao
 {
-    companion object{
-        const val queryForAbilityScoreModifier = "SELECT modifierId, attribute_name AS name, value FROM races INNER JOIN race_attributes ON race_attributes.fRaceId = races.raceId INNER JOIN attributes ON race_attributes.fAttributeId = attributes.attributeId WHERE races.raceId = :id"
-    }
-
     @Transaction
     @Query("SELECT * FROM Races")
     fun getRacesWithScores(): List<DBRace>
@@ -65,9 +61,27 @@ interface Kd205eDao
     @Query("SELECT attributes.attributeId, attributes.attribute_name, characters_attributes.value FROM characters_attributes INNER JOIN characters ON characters.characterId = characters_attributes.character_id INNER JOIN attributes ON attributes.attributeId = characters_attributes.attribute_id WHERE characters_attributes.character_id = :id")
     fun getScoresForCharacter(id: Long): List<AbilityScore>?
 
+    @Query("SELECT row_id, character_id, attribute_id, value FROM characters_attributes WHERE characters_attributes.character_id = :characterId AND characters_attributes.attribute_id = :attributeId")
+    fun getScoreForCharacter(characterId: Long, attributeId: Long) : DBAbilityScore
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCharacterScore(abilityScore: DBAbilityScore) : Long
 
-    @Update
-    fun updateCharacterScore(abilityScore: DBAbilityScore)
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    fun updateCharacterScore(abilityScore: DBAbilityScore) : Int
+
+    @Query("SELECT traits_points.trait_id, traits_points.ability_picks, traits_points.points_per_pick FROM traits_points INNER JOIN races_traits ON races_traits.race_id = :raceId")
+    fun getAbilityPicksForRacialTraits(raceId: Long) : List<DBTraitPoints>
+
+    @Query("SELECT * FROM traits WHERE traits.traitId = :traitId")
+    fun getTrait(traitId: Long) : DBTrait
+
+    @Query("SELECT * FROM characters_traits_attributes WHERE character_id = :characterId")
+    fun getCharacterAttributeTraits(characterId: Long) : List<DBCharacterAttributeTrait>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertCharacterAttributeTrait(characterAttributeTrait: DBCharacterAttributeTrait) : Long
+
+    @Query("DELETE FROM characters_traits_attributes WHERE character_id = :characterId AND attribute_id = :attributeId AND trait_id = :traitId")
+    fun qDeleteCharacterAttributeTrait(characterId: Long, attributeId: Long, traitId: Long) : Int
 }

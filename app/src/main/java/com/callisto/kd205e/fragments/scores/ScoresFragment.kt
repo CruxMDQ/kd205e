@@ -1,26 +1,38 @@
 package com.callisto.kd205e.fragments.scores
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.callisto.kd205e.R
 import com.callisto.kd205e.database.Kd205eDatabase
 import com.callisto.kd205e.database.model.Character
 import com.callisto.kd205e.databinding.ScoresFragmentBinding
 import com.callisto.kd205e.databinding.ViewScoreSetterBinding
 import com.callisto.kd205e.fragments.BaseFragment
+import kotlinx.android.synthetic.main.dialog_set_score.view.*
+import timber.log.Timber
 
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "characterId"
 
+private const val STR = "Strength"
+private const val DEX = "Dexterity"
+private const val CON = "Constitution"
+private const val INT = "Intelligence"
+private const val WIS = "Wisdom"
+private const val CHA = "Charisma"
+
+private const val ABILITY_BASE_MIN = 3
+private const val ABILITY_BASE_MAX = 18
 /**
  * A simple [Fragment] subclass.
  * Use the [ScoresFragment.newInstance] factory method to
@@ -45,20 +57,22 @@ class ScoresFragment : BaseFragment()
                 }
             }
     }
-    /*
-    * private fun setListeners() {
 
-   val clickableViews: List<View> =
-       listOf(boxOneText, boxTwoText, boxThreeText,
-boxFourText, boxFiveText, rootConstraintLayout,
-redButton, greenButton, yellowButton
-)
-    */
     private var characterId: Long? = null
 
     private lateinit var binding: ScoresFragmentBinding
 
     private lateinit var viewModel: ScoresViewModel
+
+    private val listOfSetters: List<ViewScoreSetterBinding>
+        get()
+        {
+            return listOf(
+                binding.scoreSetterStrength, binding.scoreSetterDexterity,
+                binding.scoreSetterConstitution, binding.scoreSetterIntelligence,
+                binding.scoreSetterWisdom, binding.scoreSetterCharisma
+            )
+        }
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -97,125 +111,222 @@ redButton, greenButton, yellowButton
 
         binding.lifecycleOwner = viewLifecycleOwner
 
-        val abilityStr = getString(R.string.ability_strength)
-        val abilityDex = getString(R.string.ability_dexterity)
-        val abilityCon = getString(R.string.ability_constitution)
-        val abilityInt = getString(R.string.ability_intelligence)
-        val abilityWis = getString(R.string.ability_wisdom)
-        val abilityCha = getString(R.string.ability_charisma)
-
         viewModel.track(characterId!!)
 
-        viewModel.strength.observe(viewLifecycleOwner, Observer {
-            bindScoreSetter(
-                binding.scoreSetterStrength,
-                viewModel.activeCharacter.value!!,
-                it.name
-            )
-        })
+        observeActiveCharacter()
 
+        observeIfPointsNeedToBeDistributed()
+
+        setClickListenersOnScoreSetters()
+
+        setGoBackButtonLogic()
+
+        return binding.root
+    }
+
+    private fun observeIfPointsNeedToBeDistributed()
+    {
+        // TODO Introduce check for character abilities requiring point distribution here
+
+        viewModel.mustDistributePoints.observe(viewLifecycleOwner, Observer {
+            Timber.v("Must distribute points: %s", it)
+
+            if (it!!)
+            {
+                // FIXED Fix this: as it stands, this returns null
+                if (viewModel.maxPointsPerAttribute.value == 1)
+                {
+                    displayCheckboxesOnScoreSetters()
+                }
+            }
+            else
+            {
+                hideCheckboxesOnScoreSetters()
+            }
+        })
+    }
+
+    private fun observeActiveCharacter()
+    {
         viewModel.activeCharacter.observe(viewLifecycleOwner, Observer
         {
             for (attribute in it.abilityScores!!)
             {
                 when (attribute.name)
                 {
-                    abilityStr -> bindScoreSetter(
+                    STR -> prepareScoreSetter(
                         binding.scoreSetterStrength,
                         it,
-                        abilityStr
+                        STR,
+                        resources.getDrawable(R.drawable.icons8_strength, null)
                     )
-                    abilityDex -> bindScoreSetter(
+                    DEX -> prepareScoreSetter(
                         binding.scoreSetterDexterity,
                         it,
-                        abilityDex
+                        DEX,
+                        resources.getDrawable(R.drawable.icons8_dexterity, null)
                     )
-                    abilityCon -> bindScoreSetter(
+                    CON -> prepareScoreSetter(
                         binding.scoreSetterConstitution,
                         it,
-                        abilityCon
+                        CON,
+                        resources.getDrawable(R.drawable.icons8_constitution, null)
                     )
-                    abilityInt -> bindScoreSetter(
+                    INT -> prepareScoreSetter(
                         binding.scoreSetterIntelligence,
                         it,
-                        abilityInt
+                        INT,
+                        resources.getDrawable(R.drawable.icons8_intelligence, null)
                     )
-                    abilityWis -> bindScoreSetter(
+                    WIS -> prepareScoreSetter(
                         binding.scoreSetterWisdom,
                         it,
-                        abilityWis
+                        WIS,
+                        resources.getDrawable(R.drawable.icons8_wisdom, null)
                     )
-                    abilityCha -> bindScoreSetter(
+                    CHA -> prepareScoreSetter(
                         binding.scoreSetterCharisma,
                         it,
-                        abilityCha
+                        CHA,
+                        resources.getDrawable(R.drawable.icons8_charisma, null)
                     )
                 }
             }
         })
-
-        val abilitySetters = listOf(
-            binding.scoreSetterStrength, binding.scoreSetterDexterity,
-            binding.scoreSetterConstitution, binding.scoreSetterIntelligence,
-            binding.scoreSetterWisdom, binding.scoreSetterCharisma
-        )
-
-        for (item in abilitySetters)
-        {
-            item.panelContainer.setOnClickListener { spawnEditingDialogBox(item.panelContainer.tag.toString()) }
-        }
-        return binding.root
     }
 
-    private fun spawnEditingDialogBox(ability: String)
+    private fun setGoBackButtonLogic()
     {
+        binding.btnGoBackToSpeciesSelection.setOnClickListener {
+            val action =
+                ScoresFragmentDirections.actionScoresFragmentToRaceSelectionFragment(viewModel.characterId.value!!)
+            this.findNavController().navigate(action)
+        }
+    }
+
+    private fun displayCheckboxesOnScoreSetters()
+    {
+        for (item in listOfSetters)
+        {
+            item.chkSelectStat.visibility = View.VISIBLE
+
+            item.txtPlus.visibility = View.GONE
+        }
+    }
+
+    private fun hideCheckboxesOnScoreSetters()
+    {
+        for (item in listOfSetters)
+        {
+            item.chkSelectStat.visibility = View.GONE
+
+            item.txtPlus.visibility = View.VISIBLE
+        }
+    }
+
+    private fun setClickListenersOnScoreSetters()
+    {
+        for (item in listOfSetters)
+        {
+            item.panelContainer.setOnClickListener { spawnCustomEditingDialogBox(item.panelContainer.tag.toString()) }
+        }
+    }
+
+    private fun spawnCustomEditingDialogBox(ability: String)
+    {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_set_score, null)
+
         val alertDialogBuilder = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .setTitle("Change $ability score")
 
-        alertDialogBuilder.setTitle("Change $ability score")
+        val dialog = alertDialogBuilder.show()
 
-        val input = EditText(requireContext())
-        val params = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.MATCH_PARENT
-        )
-        input.layoutParams = params
+        dialogView.input.addTextChangedListener(object : TextWatcher
+        {
+            override fun afterTextChanged(s: Editable?)
+            {
+                try
+                {
+                    val score = s.toString().toInt()
 
-        alertDialogBuilder.setView(input)
+                    if (score > ABILITY_BASE_MAX || score < ABILITY_BASE_MIN)
+                    {
+                        dialogView.txtInfo.visibility = View.VISIBLE
 
-        alertDialogBuilder.setPositiveButton("OK") { dialog, _ ->
-            val score = input.text.toString().toInt()
+                        dialogView.btnSetNewScoreValue.isEnabled = false
+                    }
+                    else
+                    {
+                        dialogView.txtInfo.visibility = View.INVISIBLE
 
-            viewModel.updateCharacterScore(ability, score)
+                        dialogView.btnSetNewScoreValue.isEnabled = true
+                    }
+                }
+                catch(e: NumberFormatException) { }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
+        })
+
+        dialogView.btnSetNewScoreValue.setOnClickListener {
+            val score = dialogView.input.text.toString().toInt()
+
+            viewModel.updateScore(ability, score)
 
             dialog.dismiss()
         }
-
-        val dialog = alertDialogBuilder.create()
-
-        dialog.show()
     }
 
-    private fun bindScoreSetter(
+    private fun prepareScoreSetter(
         view: ViewScoreSetterBinding,
         character: Character,
-        ability: String
+        ability: String,
+        iconDrawable: Drawable?
     )
     {
+        val base = character.getBaseScore(ability).toString()
+        val final = character.getFinalScore(ability).toString()
+
+        val modifier = character.getModifierScore(ability)
+        val trait = character.getTraitModifiers(ability)
+
+        val bonus = modifier + trait
+
         view.bind(
-            character.getBaseScore(ability).toString(),
-            character.getModifierScore(ability).toString(),
-            character.getFinalScore(ability).toString()
+            base,
+            bonus.toString(),
+            final,
+            iconDrawable
         )
 
         view.panelContainer.tag = ability
+
+        view.chkSelectStat.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked)
+            {
+                viewModel.addCharacterTraitAttribute(ability)
+            }
+            else
+            {
+                viewModel.removeCharacterTraitAttribute(ability)
+            }
+        }
     }
 
-    // TODO Pick up from here
-    private fun ViewScoreSetterBinding.bind(base: String, modifier: String, final: String)
+    private fun ViewScoreSetterBinding.bind(
+        base: String,
+        modifier: String,
+        final: String,
+        iconDrawable: Drawable?
+    )
     {
         txtBaseScore.text = base
         txtBonus.text = modifier
         txtFinalScore.text = final
+        imgAttributeIcon.setImageDrawable(iconDrawable)
     }
 }
 

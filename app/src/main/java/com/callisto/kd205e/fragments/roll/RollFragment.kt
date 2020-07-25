@@ -63,8 +63,7 @@ class RollFragment : BaseFragment()
 
         binding.spDifficulty.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
         {
-            override fun onNothingSelected(parent: AdapterView<*>?)
-            { /*TODO("Not yet implemented")*/ }
+            override fun onNothingSelected(parent: AdapterView<*>?) { }
 
             override fun onItemSelected
             (

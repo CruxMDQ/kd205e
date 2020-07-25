@@ -18,7 +18,10 @@ import com.callisto.kd205e.database.model.RaceModifierPair
 import com.callisto.kd205e.database.model.Species
 import com.callisto.kd205e.databinding.RaceSelectionFragmentBinding
 import com.callisto.kd205e.fragments.BaseFragment
+import com.callisto.kd205e.fragments.scores.ScoresFragment
 import timber.log.Timber
+
+private const val ARG_PARAM1 = "characterId"
 
 class SpeciesFragment : BaseFragment()
 {
@@ -26,7 +29,24 @@ class SpeciesFragment : BaseFragment()
     {
         fun newInstance() =
             SpeciesFragment()
+
+        /**
+         * Use this factory method to create a new instance of
+         * this fragment using the provided parameters.
+         *
+         * @param characterId ID of the character being edited.
+         * @return A new instance of fragment ScoresFragment.
+         */
+        @JvmStatic
+        fun newInstance(characterId: Long) =
+            ScoresFragment().apply {
+                arguments = Bundle().apply {
+                    putLong(ARG_PARAM1, characterId)
+                }
+            }
     }
+
+    private var characterId: Long? = null
 
     // To resolve these things, check the name of the layout used.
     // Source: https://stackoverflow.com/a/57228909
@@ -35,6 +55,14 @@ class SpeciesFragment : BaseFragment()
     private lateinit var viewModel: SpeciesViewModel
 
     private lateinit var raceSpinnerAdapter: ArrayAdapter<Species>
+
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            characterId = it.getLong(ARG_PARAM1)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -70,12 +98,22 @@ class SpeciesFragment : BaseFragment()
             showDialogSpinner()
         }
 
-        binding.btnPickAClass.setOnClickListener {
+        binding.btnSetAbilityScores.setOnClickListener {
             val action = SpeciesFragmentDirections.actionRaceSelectionFragmentToScoresFragment(viewModel.getCharacterId())
             this.findNavController().navigate(action)
         }
 
-        viewModel.track()
+        // TODO This is an ugly hack to allow for back and forth navigation between fragments, find a better way
+        if (characterId == 0L)
+        {
+            viewModel.track()
+        }
+        else
+        {
+            viewModel.track(characterId!!)
+        }
+
+//        viewModel.track()
 
         viewModel.races.observe(viewLifecycleOwner, Observer {
             response ->
@@ -86,6 +124,9 @@ class SpeciesFragment : BaseFragment()
                     R.layout.row_item,
                     getSpeciesForSpinner(response)
                 )
+
+                // FIXED Find out why the ProgressBar isn't being shown (possible fix: encase main layout into a container and add the ProgressBar as a sibling?)
+                viewModel.isLoading.set(false)
 
                 showDialogSpinner()
             }

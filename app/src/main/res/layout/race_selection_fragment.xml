@@ -5,47 +5,66 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View" />
         <variable
             name="raceSelectionViewModel"
             type="com.callisto.kd205e.fragments.species.SpeciesViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragments.species.SpeciesFragment">
-
-        <TextView
-            android:id="@+id/txtDetailsRace"
+        android:orientation="vertical">
+        <ProgressBar
+            android:id="@+id/progressBarSpecies"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_margin="@dimen/margin_full"
-            android:hint="Selected race traits appear here"
-            android:text="@{raceSelectionViewModel.selectedRaceString}"
-            app:layout_constraintBottom_toTopOf="@id/btnPickAClass"
+            android:layout_height="match_parent"
+            android:visibility="@{raceSelectionViewModel.isLoading() ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Race details go here" />
+            app:layout_constraintBottom_toBottomOf="parent"/>
+        <!--        android:visibility="@{raceSelectionViewModel.hasFinishedLoading}"-->
 
-        <Button
-            android:id="@+id/btnPickRaceAgain"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_full"
-            android:text="@string/lblPickRaceAgain"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{raceSelectionViewModel.isLoading() ? View.GONE : View.VISIBLE}"
+            tools:context=".fragments.species.SpeciesFragment">
 
-        <Button
-            android:id="@+id/btnPickAClass"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_full"
-            android:enabled="@{raceSelectionViewModel.pickClassButtonEnabled}"
-            android:text="@string/lblPickAClass"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            <TextView
+                android:id="@+id/txtDetailsRace"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="@dimen/margin_full"
+                android:hint="Selected race traits appear here"
+                android:text="@{raceSelectionViewModel.selectedRaceString}"
+                app:layout_constraintBottom_toTopOf="@id/btnSetAbilityScores"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Race details go here" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                android:id="@+id/btnPickRaceAgain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_full"
+                android:text="@string/lblPickRaceAgain"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <Button
+                android:id="@+id/btnSetAbilityScores"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_full"
+                android:enabled="@{raceSelectionViewModel.setAbilityScoresEnabled}"
+                android:text="@string/lblSetScores"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+            <!--        android:onClick="@{() -> raceSelectionViewModel.onSetScoresClicked()}"-->
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </layout>

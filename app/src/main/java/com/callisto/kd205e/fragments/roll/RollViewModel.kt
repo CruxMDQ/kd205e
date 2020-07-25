@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.callisto.kd205e.database.model.Difficulty
+import com.callisto.kd205e.RandomNumberGod
 
 class RollViewModel : ViewModel()
 {
@@ -38,7 +39,7 @@ class RollViewModel : ViewModel()
 
     fun onBtnRollClicked()
     {
-        _rollBase.value = rollD20()
+        _rollBase.value = RandomNumberGod.rollD20()
 
         _rollAdjusted.value = rollBase.value!!.plus(modifier.value!!)
     }
@@ -60,16 +61,6 @@ class RollViewModel : ViewModel()
         val difficulty = param.toInt()
 
         _dc.value = difficulty
-    }
-
-    private fun rollD20(): Int
-    {
-        @Suppress("JoinDeclarationAndAssignment")
-        val iResult : Int
-
-        iResult = (1..20).random()
-
-        return iResult
     }
 
     val _dc = MutableLiveData<Int>()

@@ -3,105 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-<!--    <data>-->
-
-<!--        <variable-->
-<!--            name="scoreSetterModel"-->
-<!--            type="com.callisto.kd205e.views.scoresetter.ScoreSetterModel" />-->
-<!--    </data>-->
-
-<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--        android:id="@+id/panelContainer"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content">-->
-
-<!--        <ImageView-->
-<!--            android:id="@+id/imgAttributeIcon"-->
-<!--            style="@style/AttributeIcon"-->
-<!--            android:src="@{scoreSetterModel.icon}"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            tools:src="@drawable/icons8_strength" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/txtBaseScore"-->
-<!--            style="@style/AttributeText"-->
-<!--            android:text="@{scoreSetterModel.score}"-->
-<!--            app:layout_constraintBottom_toBottomOf="@id/imgAttributeIcon"-->
-<!--            app:layout_constraintEnd_toStartOf="@id/txtPlus"-->
-<!--            app:layout_constraintStart_toEndOf="@id/imgAttributeIcon"-->
-<!--            app:layout_constraintTop_toTopOf="@id/imgAttributeIcon"-->
-<!--            tools:text="15" />-->
-
-<!--        <ImageButton-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:src="@drawable/ic_iconmonstr_chevron_up"-->
-<!--            android:tint="@color/my_green"-->
-<!--            android:visibility="gone"-->
-<!--            app:layout_constraintBottom_toBottomOf="@id/txtBaseScore"-->
-<!--            app:layout_constraintEnd_toStartOf="@id/txtBaseScore"-->
-<!--            app:layout_constraintStart_toEndOf="@id/imgAttributeIcon"-->
-<!--            app:layout_constraintTop_toTopOf="@id/txtBaseScore" />-->
-
-<!--        <EditText-->
-<!--            android:id="@+id/editBaseScore"-->
-<!--            style="@style/AttributeEdit"-->
-<!--            app:layout_constraintBottom_toBottomOf="@id/imgAttributeIcon"-->
-<!--            app:layout_constraintEnd_toStartOf="@id/txtPlus"-->
-<!--            app:layout_constraintStart_toEndOf="@id/imgAttributeIcon"-->
-<!--            app:layout_constraintTop_toTopOf="@id/imgAttributeIcon"-->
-<!--            tools:text="15" />-->
-
-<!--        <ImageButton-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:src="@drawable/ic_iconmonstr_chevron_down"-->
-<!--            android:tint="@color/my_red"-->
-<!--            android:visibility="gone"-->
-<!--            app:layout_constraintBottom_toBottomOf="@id/txtBaseScore"-->
-<!--            app:layout_constraintEnd_toStartOf="@id/txtPlus"-->
-<!--            app:layout_constraintStart_toEndOf="@id/txtBaseScore"-->
-<!--            app:layout_constraintTop_toTopOf="@id/txtBaseScore" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/txtPlus"-->
-<!--            style="@style/AttributeText"-->
-<!--            app:layout_constraintBottom_toBottomOf="@id/imgAttributeIcon"-->
-<!--            app:layout_constraintEnd_toStartOf="@id/txtBonus"-->
-<!--            app:layout_constraintStart_toEndOf="@id/txtBaseScore"-->
-<!--            app:layout_constraintTop_toTopOf="@id/imgAttributeIcon"-->
-<!--            tools:text="+" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/txtBonus"-->
-<!--            style="@style/AttributeText"-->
-<!--            android:text="@{scoreSetterModel.modifier}"-->
-<!--            android:textColor="@color/my_green"-->
-<!--            app:layout_constraintBottom_toBottomOf="@id/imgAttributeIcon"-->
-<!--            app:layout_constraintEnd_toStartOf="@id/txtEquals"-->
-<!--            app:layout_constraintStart_toEndOf="@id/txtPlus"-->
-<!--            app:layout_constraintTop_toTopOf="@id/imgAttributeIcon"-->
-<!--            tools:text="2" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/txtEquals"-->
-<!--            style="@style/AttributeText"-->
-<!--            app:layout_constraintBottom_toBottomOf="@id/imgAttributeIcon"-->
-<!--            app:layout_constraintEnd_toStartOf="@id/txtFinalScore"-->
-<!--            app:layout_constraintStart_toEndOf="@id/txtBonus"-->
-<!--            app:layout_constraintTop_toTopOf="@id/imgAttributeIcon"-->
-<!--            tools:text="=" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/txtFinalScore"-->
-<!--            style="@style/AttributeText"-->
-<!--            app:layout_constraintBottom_toBottomOf="@id/imgAttributeIcon"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toEndOf="@id/txtEquals"-->
-<!--            app:layout_constraintTop_toTopOf="@id/imgAttributeIcon"-->
-<!--            tools:text="17" />-->
-<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
     <LinearLayout
         android:id="@+id/panelContainer"
         android:layout_width="match_parent"
@@ -123,6 +24,14 @@
             android:layout_weight="2"
             android:textAlignment="center"
             tools:text="15" />
+
+        <CheckBox
+            android:id="@+id/chkSelectStat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="gone"
+            />
 
         <TextView
             android:id="@+id/txtPlus"

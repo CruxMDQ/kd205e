@@ -1,0 +1,520 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 12,
+    "identityHash": "ecff6f89082b824ec345219b43a70ade",
+    "entities": [
+      {
+        "tableName": "attributes",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`attributeId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `attribute_name` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "attributeId",
+            "columnName": "attributeId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "attribute_name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "attributeId"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_attributes_attribute_name",
+            "unique": true,
+            "columnNames": [
+              "attribute_name"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_attributes_attribute_name` ON `${TABLE_NAME}` (`attribute_name`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "characters_attributes",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`row_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `character_id` INTEGER NOT NULL, `attribute_id` INTEGER NOT NULL, `value` INTEGER NOT NULL, FOREIGN KEY(`attribute_id`) REFERENCES `attributes`(`attributeId`) ON UPDATE NO ACTION ON DELETE NO ACTION , FOREIGN KEY(`character_id`) REFERENCES `characters`(`characterId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "scoreId",
+            "columnName": "row_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fCharacterId",
+            "columnName": "character_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fAttributeId",
+            "columnName": "attribute_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "value",
+            "columnName": "value",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "row_id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_characters_attributes_row_id_character_id_attribute_id",
+            "unique": false,
+            "columnNames": [
+              "row_id",
+              "character_id",
+              "attribute_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_characters_attributes_row_id_character_id_attribute_id` ON `${TABLE_NAME}` (`row_id`, `character_id`, `attribute_id`)"
+          },
+          {
+            "name": "index_characters_attributes_attribute_id",
+            "unique": false,
+            "columnNames": [
+              "attribute_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_characters_attributes_attribute_id` ON `${TABLE_NAME}` (`attribute_id`)"
+          },
+          {
+            "name": "index_characters_attributes_character_id",
+            "unique": false,
+            "columnNames": [
+              "character_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_characters_attributes_character_id` ON `${TABLE_NAME}` (`character_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "attributes",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "attribute_id"
+            ],
+            "referencedColumns": [
+              "attributeId"
+            ]
+          },
+          {
+            "table": "characters",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "character_id"
+            ],
+            "referencedColumns": [
+              "characterId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "races_attributes",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`row_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `race_id` INTEGER NOT NULL, `attribute_id` INTEGER NOT NULL, `value` INTEGER NOT NULL, FOREIGN KEY(`attribute_id`) REFERENCES `attributes`(`attributeId`) ON UPDATE NO ACTION ON DELETE NO ACTION , FOREIGN KEY(`race_id`) REFERENCES `races`(`raceId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "modifierId",
+            "columnName": "row_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fRaceId",
+            "columnName": "race_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fAttributeId",
+            "columnName": "attribute_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "value",
+            "columnName": "value",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "row_id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_races_attributes_row_id_race_id_attribute_id",
+            "unique": false,
+            "columnNames": [
+              "row_id",
+              "race_id",
+              "attribute_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_races_attributes_row_id_race_id_attribute_id` ON `${TABLE_NAME}` (`row_id`, `race_id`, `attribute_id`)"
+          },
+          {
+            "name": "index_races_attributes_attribute_id",
+            "unique": false,
+            "columnNames": [
+              "attribute_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_races_attributes_attribute_id` ON `${TABLE_NAME}` (`attribute_id`)"
+          },
+          {
+            "name": "index_races_attributes_race_id",
+            "unique": false,
+            "columnNames": [
+              "race_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_races_attributes_race_id` ON `${TABLE_NAME}` (`race_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "attributes",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "attribute_id"
+            ],
+            "referencedColumns": [
+              "attributeId"
+            ]
+          },
+          {
+            "table": "races",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "race_id"
+            ],
+            "referencedColumns": [
+              "raceId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "characters",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`characterId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `race_id` INTEGER NOT NULL, `character_name` TEXT NOT NULL, FOREIGN KEY(`race_id`) REFERENCES `races`(`raceId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "characterId",
+            "columnName": "characterId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "raceId",
+            "columnName": "race_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "character_name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "characterId"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_characters_characterId",
+            "unique": false,
+            "columnNames": [
+              "characterId"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_characters_characterId` ON `${TABLE_NAME}` (`characterId`)"
+          },
+          {
+            "name": "index_characters_race_id",
+            "unique": false,
+            "columnNames": [
+              "race_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_characters_race_id` ON `${TABLE_NAME}` (`race_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "races",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "race_id"
+            ],
+            "referencedColumns": [
+              "raceId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "races",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`raceId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `race_name` TEXT NOT NULL, `race_adjective` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "raceId",
+            "columnName": "raceId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "race_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "adjective",
+            "columnName": "race_adjective",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "raceId"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "traits",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`traitId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `trait_name` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "traitId",
+            "columnName": "traitId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "trait_name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "traitId"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "traits_points",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trait_id` INTEGER NOT NULL, `ability_picks` INTEGER NOT NULL, `points_per_pick` INTEGER NOT NULL, PRIMARY KEY(`trait_id`), FOREIGN KEY(`trait_id`) REFERENCES `traits`(`traitId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "traitId",
+            "columnName": "trait_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "picks",
+            "columnName": "ability_picks",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "points",
+            "columnName": "points_per_pick",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "trait_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_traits_points_trait_id",
+            "unique": false,
+            "columnNames": [
+              "trait_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_traits_points_trait_id` ON `${TABLE_NAME}` (`trait_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "traits",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "trait_id"
+            ],
+            "referencedColumns": [
+              "traitId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "characters_traits_attributes",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`row_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `character_id` INTEGER NOT NULL, `attribute_id` INTEGER NOT NULL, `trait_id` INTEGER NOT NULL, `value` INTEGER NOT NULL, FOREIGN KEY(`attribute_id`) REFERENCES `attributes`(`attributeId`) ON UPDATE NO ACTION ON DELETE NO ACTION , FOREIGN KEY(`character_id`) REFERENCES `characters`(`characterId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`trait_id`) REFERENCES `traits`(`traitId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "modifierId",
+            "columnName": "row_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fCharacterId",
+            "columnName": "character_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fAttributeId",
+            "columnName": "attribute_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fTraitId",
+            "columnName": "trait_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "value",
+            "columnName": "value",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "row_id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_characters_traits_attributes_row_id_character_id_attribute_id_trait_id",
+            "unique": false,
+            "columnNames": [
+              "row_id",
+              "character_id",
+              "attribute_id",
+              "trait_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_characters_traits_attributes_row_id_character_id_attribute_id_trait_id` ON `${TABLE_NAME}` (`row_id`, `character_id`, `attribute_id`, `trait_id`)"
+          },
+          {
+            "name": "index_characters_traits_attributes_character_id",
+            "unique": false,
+            "columnNames": [
+              "character_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_characters_traits_attributes_character_id` ON `${TABLE_NAME}` (`character_id`)"
+          },
+          {
+            "name": "index_characters_traits_attributes_attribute_id",
+            "unique": false,
+            "columnNames": [
+              "attribute_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_characters_traits_attributes_attribute_id` ON `${TABLE_NAME}` (`attribute_id`)"
+          },
+          {
+            "name": "index_characters_traits_attributes_trait_id",
+            "unique": false,
+            "columnNames": [
+              "trait_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_characters_traits_attributes_trait_id` ON `${TABLE_NAME}` (`trait_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "attributes",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "attribute_id"
+            ],
+            "referencedColumns": [
+              "attributeId"
+            ]
+          },
+          {
+            "table": "characters",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "character_id"
+            ],
+            "referencedColumns": [
+              "characterId"
+            ]
+          },
+          {
+            "table": "traits",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "trait_id"
+            ],
+            "referencedColumns": [
+              "traitId"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [
+      {
+        "viewName": "CharacterAbilityScores",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS SELECT characters.characterId, characters.character_name, characters.race_id, attributes.attributeId, attributes.attribute_name, characters_attributes.value FROM characters INNER JOIN attributes ON characters_attributes.attribute_id = attributes.attributeId INNER JOIN characters_attributes ON characters_attributes.character_id = characters.characterId"
+      },
+      {
+        "viewName": "RacialAttributes",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS SELECT races.raceId, races.race_name, races.race_adjective, row_id, attribute_name AS name, value FROM races INNER JOIN races_attributes ON races_attributes.race_id = races.raceId INNER JOIN attributes ON races_attributes.attribute_id = attributes.attributeId ORDER BY races.race_name ASC"
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ecff6f89082b824ec345219b43a70ade')"
+    ]
+  }
+}

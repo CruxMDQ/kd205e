@@ -12,13 +12,17 @@ import com.callisto.kd205e.database.model.*
         DBAbilityScore::class,
         DBAbilityScoreModifier::class,
         DBCharacter::class,
-        DBRace::class
+        DBRace::class,
+        DBRaceTrait::class,
+        DBTrait::class,
+        DBTraitPoints::class,
+        DBCharacterAttributeTrait::class
     ],
     views = [
         CharacterAbilityScores::class,
         RacialAttributes::class
     ],
-    version = 9, exportSchema = true)
+    version = 13, exportSchema = true)
 @TypeConverters(Kd205eTypeConverters::class)
 abstract class Kd205eDatabase : RoomDatabase()
 {

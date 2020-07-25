@@ -13,12 +13,14 @@ data class Character(
 
     var species: Species? = null,
 
-    var abilityScores: List<AbilityScore>?
+    var abilityScores: List<AbilityScore>?,
+
+    var traitPoints: List<AbilityTraitModifier>?
 )
 {
     fun getFinalScore(parameter: String) : Int
     {
-        return getBaseScore(parameter) + getModifierScore(parameter)
+        return getBaseScore(parameter) + getModifierScore(parameter) + getTraitModifiers(parameter)
     }
 
     fun getBaseScore(parameter: String) : Int
@@ -29,6 +31,21 @@ data class Character(
     fun getModifierScore(parameter: String) : Int
     {
         return species!!.abilityModifiers.find { it!!.name == parameter }?.value ?: 0
+    }
+
+    fun getTraitModifiers(parameter: String) : Int
+    {
+        var result = 0
+
+        for (item in traitPoints!!)
+        {
+            if (item.attributeName == parameter)
+            {
+                result += item.value
+            }
+        }
+
+        return result
     }
 }
 
@@ -52,3 +69,12 @@ class CharacterScorePair
     @Embedded
     var abilityScore: AbilityScore? = null
 }
+
+class AbilityTraitModifier
+(
+    @ColumnInfo(name = colName)
+    var attributeName: String,
+
+    @ColumnInfo(name = colValue)
+    var value: Int
+)

@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_raceSelectionFragment_to_scoresFragment"
             app:destination="@id/scoresFragment" />
+        <argument
+            android:name="characterId"
+            app:argType="long" />
 
     </fragment>
     <fragment
@@ -29,6 +32,9 @@
         <argument
             android:name="characterId"
             app:argType="long" />
+        <action
+            android:id="@+id/action_scoresFragment_to_raceSelectionFragment"
+            app:destination="@id/raceSelectionFragment" />
     </fragment>
 
 </navigation>

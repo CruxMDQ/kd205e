@@ -5,8 +5,9 @@
     <string name="roll_base">Base roll</string>
     <string name="lblDifficulty">Difficulty</string>
     <string name="roll_adjusted">Adjusted</string>
-    <string name="lblPickARace">Tap to pick a race</string>
+    <string name="lblGoBackToSpeciesSelection">Select another species</string>
     <string name="lblPickAClass">Select a class</string>
+    <string name="lblSetScores">Set ability scores</string>
     <string name="lblPickRaceAgain">Pick again</string>
 
     <string name="warning_empty_attribute">EMPTY!</string>
@@ -18,4 +19,8 @@
     <string name="ability_intelligence">Intelligence</string>
     <string name="ability_wisdom">Wisdom</string>
     <string name="ability_charisma">Charisma</string>
+    <string name="set_new_value">Set new value</string>
+    <string name="score_exceeds_range_alert">Score must be between 3 and 18!</string>
+    <string name="label_confirm">Confirm</string>
+    <string name="label_points">Points left:</string>
 </resources>
