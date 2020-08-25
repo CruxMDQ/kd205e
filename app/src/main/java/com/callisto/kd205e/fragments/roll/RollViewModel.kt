@@ -3,7 +3,7 @@ package com.callisto.kd205e.fragments.roll
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.callisto.kd205e.database.model.Difficulty
+import com.callisto.kd205e.database.models.Difficulty
 import com.callisto.kd205e.RandomNumberGod
 
 class RollViewModel : ViewModel()

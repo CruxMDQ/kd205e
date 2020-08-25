@@ -38,7 +38,7 @@
                 android:layout_height="0dp"
                 android:layout_margin="@dimen/margin_full"
                 android:hint="Selected race traits appear here"
-                android:text="@{raceSelectionViewModel.selectedRaceString}"
+                android:text="@{raceSelectionViewModel.characterString}"
                 app:layout_constraintBottom_toTopOf="@id/btnSetAbilityScores"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="parent"

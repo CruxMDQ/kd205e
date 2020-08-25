@@ -5,24 +5,35 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.callisto.kd205e.database.model.*
+import com.callisto.kd205e.database.models.*
+import com.callisto.kd205e.database.entities.*
+import com.callisto.kd205e.database.entities.CharacterAbilityScore
+import com.callisto.kd205e.database.entities.AbilityScoreModifier
+import com.callisto.kd205e.database.entities.Species
+import com.callisto.kd205e.database.entities.Character
 
 @Database(entities = [
-        DBAttribute::class,
-        DBAbilityScore::class,
-        DBAbilityScoreModifier::class,
-        DBCharacter::class,
-        DBRace::class,
-        DBRaceTrait::class,
-        DBTrait::class,
-        DBTraitPoints::class,
-        DBCharacterAttributeTrait::class
+        Attribute::class,
+        CharacterAbilityScore::class,
+        AbilityScoreModifier::class,
+        Character::class,
+        Species::class,
+        RaceTrait::class,
+        Trait::class,
+        TraitPoints::class,
+        CharacterAttributeTrait::class,
+        Area::class,
+        SpellSchool::class,
+        Spell::class,
+        TraitSpells::class,
+        TraitOption::class,
+        CharacterTrait::class
     ],
     views = [
         CharacterAbilityScores::class,
         RacialAttributes::class
     ],
-    version = 13, exportSchema = true)
+    version = 18, exportSchema = true)
 @TypeConverters(Kd205eTypeConverters::class)
 abstract class Kd205eDatabase : RoomDatabase()
 {

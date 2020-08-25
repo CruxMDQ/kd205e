@@ -1,23 +1,44 @@
-package com.callisto.kd205e.database.model
+package com.callisto.kd205e.database.models
 
+import android.os.Build
+import android.text.Html
+import android.text.Spanned
+import androidx.core.text.HtmlCompat
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
+import com.callisto.kd205e.database.entities.Character
+import com.callisto.kd205e.database.entities.Trait
+import java.lang.StringBuilder
 
 private const val pkAttributeId = "attributeId"
 private const val colName = "attribute_name"
 private const val colValue = "value"
 
-data class Character(
+data class CharacterModel(
     @Embedded
-    var character: DBCharacter,
+    var character: Character,
 
-    var species: Species? = null,
+    var speciesModel: SpeciesModel? = null,
 
-    var abilityScores: List<AbilityScore>?,
+    var abilityScores: List<AbilityScore>? = null,
 
-    var traitPoints: List<AbilityTraitModifier>?
+    var traitPoints: List<AbilityTraitModifier>? = null,
+
+    var traits: List<Trait>? = null
 )
 {
+    constructor(character: Character, speciesModel: SpeciesModel?)
+            : this(character, speciesModel, null, null, null)
+    {
+        this.character = character
+        this.speciesModel = speciesModel
+    }
+
+    constructor(character: Character) : this (character, null, null, null, null)
+    {
+        this.character = character
+    }
+
     fun getFinalScore(parameter: String) : Int
     {
         return getBaseScore(parameter) + getModifierScore(parameter) + getTraitModifiers(parameter)
@@ -30,7 +51,7 @@ data class Character(
 
     fun getModifierScore(parameter: String) : Int
     {
-        return species!!.abilityModifiers.find { it!!.name == parameter }?.value ?: 0
+        return speciesModel!!.abilityModifiers.find { it!!.name == parameter }?.value ?: 0
     }
 
     fun getTraitModifiers(parameter: String) : Int
@@ -64,7 +85,7 @@ data class AbilityScore
 class CharacterScorePair
 {
     @Embedded
-    lateinit var character : DBCharacter
+    lateinit var character : Character
 
     @Embedded
     var abilityScore: AbilityScore? = null

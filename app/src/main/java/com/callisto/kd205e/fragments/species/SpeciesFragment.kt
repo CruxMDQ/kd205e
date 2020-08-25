@@ -13,9 +13,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.callisto.kd205e.R
+import com.callisto.kd205e.SpinnerArrayAdapter
 import com.callisto.kd205e.database.Kd205eDatabase
-import com.callisto.kd205e.database.model.RaceModifierPair
-import com.callisto.kd205e.database.model.Species
+import com.callisto.kd205e.database.entities.Trait
+import com.callisto.kd205e.database.models.SpeciesModel
 import com.callisto.kd205e.databinding.RaceSelectionFragmentBinding
 import com.callisto.kd205e.fragments.BaseFragment
 import com.callisto.kd205e.fragments.scores.ScoresFragment
@@ -54,7 +55,8 @@ class SpeciesFragment : BaseFragment()
 
     private lateinit var viewModel: SpeciesViewModel
 
-    private lateinit var raceSpinnerAdapter: ArrayAdapter<Species>
+    private lateinit var raceSpinnerAdapter: ArrayAdapter<SpeciesModel>
+    private lateinit var traitSpinnerAdapter: ArrayAdapter<Trait>
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -95,7 +97,7 @@ class SpeciesFragment : BaseFragment()
         binding.lifecycleOwner = viewLifecycleOwner
 
         binding.btnPickRaceAgain.setOnClickListener {
-            showDialogSpinner()
+            showSpeciesSelectionDialog()
         }
 
         binding.btnSetAbilityScores.setOnClickListener {
@@ -115,58 +117,62 @@ class SpeciesFragment : BaseFragment()
 
 //        viewModel.track()
 
-        viewModel.races.observe(viewLifecycleOwner, Observer {
-            response ->
-            if (!response.isNullOrEmpty())
-            {
-                raceSpinnerAdapter = ArrayAdapter(
+        viewModel.speciesList.observe(viewLifecycleOwner, Observer {
+
+//            raceSpinnerAdapter = ArrayAdapter(
+//                this.requireContext(),
+//                R.layout.row_item,
+//                it
+//            )
+            // FIXED Replaced vanilla adapter with custom adapter to allow for 'Select One' title.
+            // Source: https://medium.com/vattenfall-tech/android-spinner-customizations-8b4980fb0ee3
+            raceSpinnerAdapter = SpinnerArrayAdapter(
+                this.requireContext(),
+                it
+            )
+
+            // FIXED Find out why the ProgressBar isn't being shown (possible fix: encase main layout into a container and add the ProgressBar as a sibling?)
+            viewModel.isLoading.set(false)
+
+            showSpeciesSelectionDialog()
+        })
+
+//        viewModel.traitsWithPendingSelections.observe(viewLifecycleOwner, Observer {
+//            if (it.isNotEmpty())
+        viewModel.activeTrait.observe(viewLifecycleOwner, Observer {
+//            if (it.isNotNull())
+//            {
+                Timber.v("Observing list of traits with pending selections")
+
+                traitSpinnerAdapter = SpinnerArrayAdapter(
                     this.requireContext(),
-                    R.layout.row_item,
-                    getSpeciesForSpinner(response)
+                    // it
+                    viewModel.traitOptionsLD.value!!
                 )
 
-                // FIXED Find out why the ProgressBar isn't being shown (possible fix: encase main layout into a container and add the ProgressBar as a sibling?)
-                viewModel.isLoading.set(false)
+                showTraitSelectionDialog()
+//            }
+        })
 
-                showDialogSpinner()
-            }
+        viewModel.summary.observe(viewLifecycleOwner, Observer {
+            Timber.v("Observing summary of selections")
+
+            binding.txtDetailsRace.text = it
         })
 
         return binding.root
     }
 
-    // TODO find a way to move this out of the fragment and into the model
-    private fun getSpeciesForSpinner(response: List<RaceModifierPair>): MutableList<Species>
-    {
-        val mListSpecies = mutableListOf<Species>()
-        val mapRacesWithMods = response.groupBy(
-            keySelector = { it.race },
-            valueTransform = { it.abilityScoreModifier }
-        )
-
-        mapRacesWithMods.forEach {
-            mListSpecies.add(Species(it.key, it.value))
-        }
-
-        Timber.v("Races retrieved: %s", mListSpecies.size.toString())
-
-        return mListSpecies
-    }
-
-    // "Boss, da sauce fer doing dis 'ere fing:
-    // https://inducesmile.com/kotlin-source-code/how-to-display-a-spinner-in-alert-dialog-in-kotlin/ "
-    private fun showDialogSpinner()
+    private fun showTraitSelectionDialog()
     {
         val spinner = Spinner(requireContext())
 
         val alertDialogBuilder = AlertDialog.Builder(requireContext())
 
-        spinner.adapter = raceSpinnerAdapter
+        spinner.adapter = traitSpinnerAdapter
 
-        spinner.setSelection(0, false)
-
-        alertDialogBuilder.setTitle("Pick a race")
-        alertDialogBuilder.setMessage("Select a race from the options shown.")
+        alertDialogBuilder.setTitle("Pick a trait")
+        alertDialogBuilder.setMessage("Select a trait from the options available.")
 
         alertDialogBuilder.setView(spinner)
 
@@ -185,14 +191,65 @@ class SpeciesFragment : BaseFragment()
             {
                 // FIXED Find out how to stop this from firing when the adapter is set
                 // Source: https://stackoverflow.com/a/37561529
-                val species: Species? = raceSpinnerAdapter.getItem(position)
+                val trait: Trait? = traitSpinnerAdapter.getItem(position)
 
-                viewModel.onRacePicked(species)
+                if (position != 0)
+                {
+                    viewModel.onTraitPicked(trait)
 
-                alertDialog.dismiss()
+                    alertDialog.dismiss()
+                }
             }
         }
 
         alertDialog.show()
+
+        spinner.setSelection(0, false)
+    }
+
+    // "Boss, da sauce fer doing dis 'ere fing:
+    // https://inducesmile.com/kotlin-source-code/how-to-display-a-spinner-in-alert-dialog-in-kotlin/ "
+    private fun showSpeciesSelectionDialog()
+    {
+        val spinner = Spinner(requireContext())
+
+        val alertDialogBuilder = AlertDialog.Builder(requireContext())
+
+        spinner.adapter = raceSpinnerAdapter
+
+        alertDialogBuilder.setTitle("Pick a race")
+        alertDialogBuilder.setMessage("Select a race from the options available.")
+
+        alertDialogBuilder.setView(spinner)
+
+        val alertDialog = alertDialogBuilder.create()
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
+        {
+            override fun onNothingSelected(parent: AdapterView<*>?) { }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            )
+            {
+                // FIXED Find out how to stop this from firing when the adapter is set
+                // Source: https://stackoverflow.com/a/37561529
+                val speciesModel: SpeciesModel? = raceSpinnerAdapter.getItem(position)
+
+                if (position != 0)
+                {
+                    viewModel.onRacePicked(speciesModel)
+
+                    alertDialog.dismiss()
+                }
+            }
+        }
+
+        alertDialog.show()
+
+        spinner.setSelection(0, false)
     }
 }

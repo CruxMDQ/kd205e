@@ -1,6 +1,7 @@
-package com.callisto.kd205e.database.model
+package com.callisto.kd205e.database.models
 
 import androidx.room.TypeConverter
+import com.callisto.kd205e.database.entities.AbilityScoreModifier
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -9,17 +10,17 @@ class Kd205eTypeConverters
     private val gson = Gson()
 
     @TypeConverter
-    fun fromSetScoreModifier(setAsm: Set<DBAbilityScoreModifier>): String?
+    fun fromSetScoreModifier(setAsm: Set<AbilityScoreModifier>): String?
     {
         return gson.toJson(setAsm)
     }
 
     @TypeConverter
-    fun toSetScoreModifier(value: String): Set<DBAbilityScoreModifier>?
+    fun toSetScoreModifier(value: String): Set<AbilityScoreModifier>?
     {
-        val groupListType = object : TypeToken<Set<DBAbilityScoreModifier?>?>() {}.type
+        val groupListType = object : TypeToken<Set<AbilityScoreModifier?>?>() {}.type
 
-        val setAsm: Set<DBAbilityScoreModifier> = gson.fromJson(value, groupListType)
+        val setAsm: Set<AbilityScoreModifier> = gson.fromJson(value, groupListType)
 
         return setAsm
     }

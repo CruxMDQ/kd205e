@@ -3,16 +3,18 @@ package com.callisto.kd205e.fragments.scores
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import com.callisto.kd205e.database.Kd205eDao
-import com.callisto.kd205e.database.model.*
+import com.callisto.kd205e.database.models.*
 import com.callisto.kd205e.fragments.BaseViewModel
 import com.callisto.kd205e.RandomNumberGod
+import com.callisto.kd205e.database.entities.CharacterAttributeTrait
+import com.callisto.kd205e.database.entities.Attribute
+import com.callisto.kd205e.database.entities.CharacterAbilityScore
+import com.callisto.kd205e.database.entities.TraitPoints
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.lang.Exception
 
 class ScoresViewModel
     : BaseViewModel
@@ -22,7 +24,7 @@ class ScoresViewModel
     constructor(database: Kd205eDao, application: Application) : super(application)
     {
         this.database = database
-        this._activeCharacter = MutableLiveData()
+        this._activeCharacterModel = MutableLiveData()
         this._characterId = MutableLiveData()
         this._activeTraitId = MutableLiveData()
 
@@ -36,7 +38,7 @@ class ScoresViewModel
 
     // FIXED Fix this so it's accessible via LiveData.
     // Directly accessing MutableLiveData is bad practice.
-    private var _activeCharacter: MutableLiveData<Character>
+    private var _activeCharacterModel: MutableLiveData<CharacterModel>
 
     private var _characterId: MutableLiveData<Long>
 
@@ -50,8 +52,8 @@ class ScoresViewModel
 
     private var _maxPointsPerAttribute: MutableLiveData<Int>
 
-    val activeCharacter: LiveData<Character>
-        get() = _activeCharacter
+    val activeCharacterModel: LiveData<CharacterModel>
+        get() = _activeCharacterModel
 
     val characterId: LiveData<Long>
         get() = _characterId
@@ -71,7 +73,7 @@ class ScoresViewModel
     val maxPointsPerAttribute: LiveData<Int>
         get() = _maxPointsPerAttribute
 
-    private lateinit var attributes: List<DBAttribute>
+    private lateinit var attributes: List<Attribute>
 
     fun track(parameter: Long)
     {
@@ -79,15 +81,16 @@ class ScoresViewModel
 
             _characterId.value = parameter
 
-            _activeCharacter.value = setUpCharacterFromDB(characterId.value!!)
-
-            val result = getAbilityPicksForRacialTraits(_activeCharacter.value!!.species!!.race.raceId)
+            _activeCharacterModel.value = setUpCharacterFromDB(characterId.value!!)
 
             // DONE Build algorithm to get point distribution
             // Algorithm must:
             // - Get all racial traits AND class abilities
             // - Determine if there are any requiring point distribution
             // - Determine how many points must be distributed, and how
+
+            val result = getAbilityPicksForRacialTraits(_activeCharacterModel.value!!.speciesModel!!.race.raceId)
+
             if (result.isNotEmpty())
             {
                 setUpTraitPointAllocation(result)
@@ -97,7 +100,7 @@ class ScoresViewModel
         }
     }
 
-    private fun setUpTraitPointAllocation(result: List<DBTraitPoints>)
+    private fun setUpTraitPointAllocation(result: List<TraitPoints>)
     {
         Timber.v(result.size.toString())
 
@@ -116,7 +119,7 @@ class ScoresViewModel
         _mustDistributePoints.value = true
     }
 
-    private suspend fun getAbilityPicksForRacialTraits(raceId: Long) : List<DBTraitPoints>
+    private suspend fun getAbilityPicksForRacialTraits(raceId: Long) : List<TraitPoints>
     {
         return withContext(Dispatchers.IO)
         {
@@ -131,7 +134,7 @@ class ScoresViewModel
 //        }
 //    }
 
-    private suspend fun setUpCharacterFromDB(characterId: Long): Character?
+    private suspend fun setUpCharacterFromDB(characterId: Long): CharacterModel?
     {
         return withContext(Dispatchers.IO)
         {
@@ -140,14 +143,14 @@ class ScoresViewModel
             var scores = database.getScoresForCharacter(characterId)
 
             // TODO Maybe it would be best to move this into its own method call?
-            attributes = database.checkAllAttributes()
+            attributes = database.getAllAttributes()
 
             if (scores!!.isEmpty())
             {
                 for (attribute in attributes)
                 {
                     database.insertCharacterScore(
-                        DBAbilityScore(
+                        CharacterAbilityScore(
                             characterId,
                             attribute.attributeId,
                             RandomNumberGod.roll4d6MinusLowest()
@@ -169,13 +172,15 @@ class ScoresViewModel
                 mediatorList.add(AbilityTraitModifier(attributes.find { it.attributeId == item.fAttributeId }!!.name, item.value))
             }
 
-            val result = Character(dbCharacter, charSpecies, scores, mediatorList)
+            val traitList = database.getCharacterTraits(characterId)
+
+            val result = CharacterModel(dbCharacter, charSpecies, scores, mediatorList, traitList)
 
             result
         }
     }
 
-    private suspend fun refreshCharacter(characterId: Long): Character?
+    private suspend fun refreshCharacter(characterId: Long): CharacterModel?
     {
         return withContext(Dispatchers.IO)
         {
@@ -194,13 +199,15 @@ class ScoresViewModel
                 mediatorList.add(AbilityTraitModifier(attributes.find { it.attributeId == item.fAttributeId }!!.name, item.value))
             }
 
-            val result = Character(dbCharacter, charSpecies, scores, mediatorList)
+            val traitList = database.getCharacterTraits(characterId)
+
+            val result = CharacterModel(dbCharacter, charSpecies, scores, mediatorList, traitList)
 
             result
         }
     }
 
-    private suspend fun getCharacterSpecies(raceId: Long): Species?
+    private suspend fun getCharacterSpecies(raceId: Long): SpeciesModel?
     {
         return withContext(Dispatchers.IO)
         {
@@ -208,17 +215,17 @@ class ScoresViewModel
 
             Timber.v(racesAndAbilityModifiers.size.toString())
 
-            val mListSpecies = mutableListOf<Species>()
+            val mListSpecies = mutableListOf<SpeciesModel>()
             val mapRacesWithMods = racesAndAbilityModifiers.groupBy(
                 keySelector = { it.race },
                 valueTransform = { it.abilityScoreModifier }
             )
 
             mapRacesWithMods.forEach {
-                mListSpecies.add(Species(it.key, it.value))
+                mListSpecies.add(SpeciesModel(it.key, it.value))
             }
 
-            var result: Species? = null
+            var result: SpeciesModel? = null
 
             for (species in mListSpecies)
             {
@@ -241,16 +248,21 @@ class ScoresViewModel
             val rowToUpdate = database.getScoreForCharacter(characterId, attributeId)
 
             database.updateCharacterScore(
-                DBAbilityScore(rowToUpdate.scoreId, characterId, attributeId, score)
+                CharacterAbilityScore(
+                    rowToUpdate.scoreId,
+                    characterId,
+                    attributeId,
+                    score
+                )
             )
 
-            _activeCharacter.postValue(refreshCharacter(characterId))
+            _activeCharacterModel.postValue(refreshCharacter(characterId))
         }
     }
 
     fun updateScore(ability: String, score: Int)
     {
-        val characterId = activeCharacter.value!!.character.characterId
+        val characterId = activeCharacterModel.value!!.character.characterId
 
         val attributeId = attributes.find { it.name == ability }!!.attributeId
 
@@ -261,7 +273,7 @@ class ScoresViewModel
 
     fun addCharacterTraitAttribute(ability: String)
     {
-        val characterId = activeCharacter.value!!.character.characterId
+        val characterId = activeCharacterModel.value!!.character.characterId
 
         val attributeId = attributes.find { it.name == ability }!!.attributeId
 
@@ -276,7 +288,7 @@ class ScoresViewModel
 
     fun removeCharacterTraitAttribute(ability: String)
     {
-        val characterId = activeCharacter.value!!.character.characterId
+        val characterId = activeCharacterModel.value!!.character.characterId
 
         val attributeId = attributes.find { it.name == ability }!!.attributeId
 
@@ -293,11 +305,18 @@ class ScoresViewModel
     {
         return withContext(Dispatchers.IO)
         {
-            val result: Long = database.insertCharacterAttributeTrait(DBCharacterAttributeTrait(characterId, attributeId, traitId, 1))
+            val result: Long = database.insertCharacterAttributeTrait(
+                CharacterAttributeTrait(
+                    characterId,
+                    attributeId,
+                    traitId,
+                    1
+                )
+            )
 
             Timber.v("DB operation result: $result")
 
-            _activeCharacter.postValue(refreshCharacter(characterId))
+            _activeCharacterModel.postValue(refreshCharacter(characterId))
         }
     }
 
@@ -305,11 +324,11 @@ class ScoresViewModel
     {
         return withContext(Dispatchers.IO)
         {
-            val result: Int = database.qDeleteCharacterAttributeTrait(characterId, attributeId, traitId)
+            val result: Int = database.deleteCharacterAttributeTrait(characterId, attributeId, traitId)
 
             Timber.v("DB operation result: $result")
 
-            _activeCharacter.postValue(refreshCharacter(characterId))
+            _activeCharacterModel.postValue(refreshCharacter(characterId))
         }
     }
 

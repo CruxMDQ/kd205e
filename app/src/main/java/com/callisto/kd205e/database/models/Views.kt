@@ -1,4 +1,4 @@
-package com.callisto.kd205e.database.model
+package com.callisto.kd205e.database.models
 
 import androidx.room.DatabaseView
 

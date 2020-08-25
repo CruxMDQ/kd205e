@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.callisto.kd205e.R
 import com.callisto.kd205e.database.Kd205eDatabase
-import com.callisto.kd205e.database.model.Character
+import com.callisto.kd205e.database.models.CharacterModel
 import com.callisto.kd205e.databinding.ScoresFragmentBinding
 import com.callisto.kd205e.databinding.ViewScoreSetterBinding
 import com.callisto.kd205e.fragments.BaseFragment
@@ -148,7 +148,7 @@ class ScoresFragment : BaseFragment()
 
     private fun observeActiveCharacter()
     {
-        viewModel.activeCharacter.observe(viewLifecycleOwner, Observer
+        viewModel.activeCharacterModel.observe(viewLifecycleOwner, Observer
         {
             for (attribute in it.abilityScores!!)
             {
@@ -282,16 +282,16 @@ class ScoresFragment : BaseFragment()
 
     private fun prepareScoreSetter(
         view: ViewScoreSetterBinding,
-        character: Character,
+        characterModel: CharacterModel,
         ability: String,
         iconDrawable: Drawable?
     )
     {
-        val base = character.getBaseScore(ability).toString()
-        val final = character.getFinalScore(ability).toString()
+        val base = characterModel.getBaseScore(ability).toString()
+        val final = characterModel.getFinalScore(ability).toString()
 
-        val modifier = character.getModifierScore(ability)
-        val trait = character.getTraitModifiers(ability)
+        val modifier = characterModel.getModifierScore(ability)
+        val trait = characterModel.getTraitModifiers(ability)
 
         val bonus = modifier + trait
 
@@ -304,7 +304,7 @@ class ScoresFragment : BaseFragment()
 
         view.panelContainer.tag = ability
 
-        view.chkSelectStat.setOnCheckedChangeListener { buttonView, isChecked ->
+        view.chkSelectStat.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked)
             {
                 viewModel.addCharacterTraitAttribute(ability)
